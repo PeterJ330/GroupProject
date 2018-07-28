@@ -15,15 +15,31 @@
 </head>
 
 <body>
-    <header> <h1>Nutrition API</h1></header>
+    <header>
+        <h1>Nutrition API</h1>
+    </header>
+    <br>
+    <div class="container">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <button class="btn btn-outline-secondary" type="button">Food</button>
+            </div>
+            <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <button class="btn btn-outline-secondary" type="button">Nutrients</button>
+            </div>
+            <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
+        </div>
+        <div id="JSON"></div>
+        <div id="foodReport"></div>
+        <div id="nutrientReport"></div>
 
+    </div>
+    <!-- closes container -->
 
-
-
-
-
-
-<footer></footer>
+    <footer>U.S. Department of Agriculture, Agricultural Research Service. 2018. USDA National Nutrient Database for Standard Reference, Release . Nutrient Data Laboratory Home Page, http://www.ars.usda.gov/nutrientdata</footer>
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
     <!-- nutritionAPI.js -->
