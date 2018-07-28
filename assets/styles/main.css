@@ -1,0 +1,27 @@
+/*============================
+	    Color Palette
+============================*/
+/*
+	*	Example Color -- Headers				#H3XC0D3;	rgb( ,  ,  , );
+	*	Primary Font							#H3XC0D3;	rgb( ,  ,  , );
+*/
+
+/*============================
+	    Font-Families
+============================*/
+/*
+	*	Example Font -- Main Font				font-family: 'Example Font', sans-serif;
+	*	Another Example							font-family: 'Example Font', sans-serif;
+*/
+
+/*============================
+	    Global Styles
+============================*/
+
+
+/*============================
+	    JavaScript
+============================*/
+.js-hidden {
+	display: none;
+}

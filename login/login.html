@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+	<link rel="stylesheet" href="assets/styles/reset.css">
+	<link href="https://fonts.googleapis.com/css?family=Fredoka+One|Roboto+Condensed" rel="stylesheet">
+	<link rel="stylesheet" href="assets/styles/app.css">
+	<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.3.0/firebase.js"></script>
+<!-- 	<script src="assets/scripts/app.js"></script> -->
+</head>
+
+<body>
+
+<header role="header">
+	<h1><a href="index.html">My Fitness</a></h1>
+	<div class="profile-container">
+		<div class="profile-name"></div>
+		<div class="dropdown-wrapper">
+			<div class="dropdown">
+				<div id="logout"></div>
+				<div></div>
+			</div>
+		</div>
+	</div>
+</header>
+
+<div class="login-container">
+	<h2>Login</h2>
+	<input type="email" id="email" placeholder="email...">
+	<input type="password" id="password" placeholder="password...">
+	<div class="btn" id="login-btn">Login!</div>
+	<p>Need to create an account? <a href="signup.html">Sign Up!</a></p>
+	<p>Forgot your password? <a href="reset-password.html">Reset it!</a></p>
+</div>
+
+
+</body>
+
+<script>
+
+var config = {
+	apiKey: "AIzaSyBoMGE2tup_IQsm5aHnfdlAh4HMLD3J_Yw",
+	authDomain: "login-test-25879.firebaseapp.com",
+	databaseURL: "https://login-test-25879.firebaseio.com",
+	projectId: "login-test-25879",
+	storageBucket: "login-test-25879.appspot.com",
+	messagingSenderId: "127721403757"
+};
+
+
+firebase.initializeApp(config);
+
+var db = firebase.database();
+
+$('#login-btn').click(signIn);
+
+function signIn() {
+	
+	if(firebase.auth().currentUser) {
+		//	If user is signed in, sign them out
+		firebase.auth().signOut();
+	} else {
+		var email = $('#email').val().trim();
+		var password = $('#password').val().trim();
+		
+		//	password validations would go here
+	
+		firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+			//	Handle errors here
+			var errorCode = error.code;
+			var errorMessage = error.message;
+				
+			if(errorCode === 'auth/wrong-password') {
+				alert('Wrong password');
+			} else {
+				alert(errorMessage);
+			}
+			console.log(error);
+		});
+			
+	}
+}
+firebase.auth().onAuthStateChanged(function(user) {
+		
+	if(user) {
+		window.location.href='index.html';		
+	} else {
+		//	User is signed out
+		console.log('User is signed out');
+	}
+});
+
+document.onkeyup = function(event) {
+	if(event.keyCode == 13 && $('#email').val() != '' && $('#password').val() != '') {
+		signIn();	
+	}	
+}
+</script>
+
+</html>
