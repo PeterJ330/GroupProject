@@ -86,8 +86,11 @@ $(document).ready(function() {
 	//	User Menu event listeners
 	$(document).on('click', '#logout', logOut);
 	
-	//	ToDo:	Set up calorie calculator event listener(s)
-	//	or preventDefault if using form submit
+	//	Calorie calculator event listener
+	$('#calculator-submit').click(function(event) {
+		event.preventDefault();
+		calculateCalMaint();
+	});
 	
 	
 });
