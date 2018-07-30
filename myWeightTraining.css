@@ -1,0 +1,18 @@
+html {
+    margin: Auto;
+}
+
+#myWeightTraining {
+    float: left;
+    margin: auto;
+    padding: 5px;
+
+}
+
+.custom-select {
+    margin: auto;
+    width: 200px;
+    height: 30px;
+    padding: 5px;
+    
+}
