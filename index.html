@@ -3,6 +3,8 @@
 <head>
 	<title>App Title</title>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="App Description">
 	
 	<!--	Reset CSS	-->
 	<link rel="stylesheet" href="assets/styles/reset.css">
@@ -17,9 +19,11 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 	<!--	Firebase	-->
 	<script src="https://www.gstatic.com/firebasejs/5.3.0/firebase.js"></script>
-	<script src="assets/scripts/database.js">
+	<script src="assets/scripts/database.js"></script>
+	<!--	Functions	-->
+	<script src="assets/scripts/functions.js"></script>
 	<!--	Main Scripts	-->
-	<script src="assets/scripts/home.js" defer></script>
+<!-- 	<script src="assets/scripts/home.js" defer></script> -->
 </head>
 
 <body>
@@ -45,5 +49,44 @@
 	</footer>
 
 </body>
+
+<script>
+
+$(document).ready(function() {
+	
+	firebase.auth().onAuthStateChanged(function(user) {
+			
+		if(user) {
+			
+			$('.username').text(user.displayName);
+			$('.dropdown').empty();
+			var logout = $('<div>');
+			logout.text('Logout');
+			logout.attr('id', 'logout');
+			var profile = $('<div>');
+			profile.text('Profile');
+			$('.dropdown').append(logout, profile);
+		} else {
+			$('.username').text('Get Fit!');
+			$('.dropdown').empty();
+			var login = $('<div>');
+			login.text('Log In');
+			login.attr('id', 'login');
+			var signup = $('<div>');
+			signup.text('Sign Up');
+			signup.attr('id', 'signup');
+			$('.dropdown').append(login, signup);
+		}
+	});
+
+	//	ToDo:	create links instead of divs and give absolute paths from github pages
+	
+	$(document).on('click', '#logout', logOut);
+	$(document).on('click', '#login', function() { window.location.href='login/login.html' });
+	$(document).on('click', '#signup', function() { window.location.href='login/signup.html' });
+
+});
+	
+</script>
 
 </html>

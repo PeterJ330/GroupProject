@@ -1,4 +1,3 @@
-console.log('home.js loaded');
 function logOut() {
 
 	if(firebase.auth().currentUser) {
@@ -7,39 +6,10 @@ function logOut() {
 //		window.location.href='login.html';
 	}
 }
-function signIn() {
-	
-	if(firebase.auth().currentUser) {
-		//	If user is signed in, sign them out
-		firebase.auth().signOut();
-	} else {
-		var email = $('#email').val().trim();
-		var password = $('#password').val().trim();
-		
-		//	password validations would go here
-	
-		firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-			//	Handle errors here
-			var errorCode = error.code;
-			var errorMessage = error.message;
-				
-			if(errorCode === 'auth/wrong-password') {
-				alert('Wrong password');
-			} else {
-				alert(errorMessage);
-			}
-			console.log(error);
-		});
-			
-	}
-}
-console.log(window.document.href());
 
 firebase.auth().onAuthStateChanged(function(user) {
 		
-// 	if(user && window.document.href() != 'index.html') {
-		
-/* 	} else */ if(user) {
+	if(user) {
 		
 		$('.username').text(user.displayName);
 		$('.dropdown').empty();
@@ -67,4 +37,3 @@ firebase.auth().onAuthStateChanged(function(user) {
 $(document).on('click', '#logout', logOut);
 $(document).on('click', '#login', function() { window.location.href='login/login.html' });
 $(document).on('click', '#signup', function() { window.location.href='login/signup.html' });
-

@@ -7,7 +7,7 @@
 */
 
 /*============================
-	    Font-Families
+	  	    Fonts
 ============================*/
 /*
 	*	Example Font -- Main Font				font-family: 'Example Font', sans-serif;
@@ -18,6 +18,15 @@
 	    Global Styles
 ============================*/
 
+
+
+/*============================
+		   Forms
+============================*/
+
+.help-icon {
+	cursor: pointer;
+}
 
 /*============================
 	    JavaScript
