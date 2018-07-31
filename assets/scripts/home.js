@@ -10,6 +10,7 @@ function logOut() {
 firebase.auth().onAuthStateChanged(function(user) {
 		
 	if(user) {
+		
 		$('.username').text(user.displayName);
 		$('.dropdown').empty();
 		var logout = $('<div>');
@@ -36,4 +37,3 @@ firebase.auth().onAuthStateChanged(function(user) {
 $(document).on('click', '#logout', logOut);
 $(document).on('click', '#login', function() { window.location.href='login/login.html' });
 $(document).on('click', '#signup', function() { window.location.href='login/signup.html' });
-

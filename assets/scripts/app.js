@@ -1,93 +1,119 @@
 var displayName = '';
 var uid = '';
 var email = '';
-
-function logOut() {
-	
-	if(firebase.auth().currentUser) {
-		//	If user is signed in, sign them out
-		firebase.auth().signOut();
-	}
-}
-
-function calculateCalMaint() {
-	
-	//	Capture Inputs
-	var weight = $('#weight-input').val();
-	var height = $('#height-input').val();
-	var activity = $('#activity-input').val();
-	var age = $('#age-input').val();
-	var gender = $('#gender-input').val();
-	
-	//	ToDO:	Validations
-				
-	var kg = weight/2.2046226218;
-	var cm = height*2.54;
-	
-	var calMaintLevel = 0;
-	
-/*
-			Mifflin - St Jeor Formula
-Men
-10 x weight (kg) + 6.25 x height (cm) – 5 x age (y) + 5
-
-Women
-10 x weight (kg) + 6.25 x height (cm) – 5 x age (y) – 161.
-
-*/
-
-	if(gender === 'male') {
-		calMaintLevel = Math.round(10*kg+6.25*cm-5*age+5);
-	} else if(gender === 'female') {
-		calMaintLevel = Math.round(10*kg+6.25*cm-5*age-161);
-	}
-	
-	//	Update DB
-	db.ref('users/' + uid).update({
-		weightLB: weight,
-		weightKG: kg,
-		heightIN: height,
-		heightCM: cm,
-		activity: activity,
-		age: age,
-		gender: gender,
-		calMaintLevel: calMaintLevel
-	});
-	
-	//	Update Displays
-	$('#calculator-form-display').addClass('js-hidden');
-	$('#cal-maint-display').text(calMaintLevel);
-	$('#cal-results-display').removeClass('js-hidden');
-}
+var currentWeight;
 
 $(document).ready(function() {
+	
+	//	user login event listener
 	firebase.auth().onAuthStateChanged(function(user) {
 			
 		if(user) {
+			//	set user menu data if user is logged in
 			displayName = user.displayName;
 			uid = user.uid;
 			email = user.email;
 			
-			$('.username').text(user.displayName);
+			//	update user menu displays
+			$('.username').text(escapeHTML(user.displayName));
 			$('.dropdown').empty();
 			var logout = $('<div>');
 			logout.text('Logout');
 			logout.attr('id', 'logout');
 			var profile = $('<div>');
 			profile.text('Profile');
-			$('.dropdown').append(logout, profile);
+			$('.dropdown').append(logout, profile);	
 			
+			//	usersInfo event listener
+			db.ref('users/' + uid + '/userInfo').on('value', function(snapshot) {
+			if(snapshot) {
+				//	if userInfo exists, fill in the calculator form with the user's previous values
+				$('#weight-input').val(snapshot.val().weightLB);
+				$('select [value="' + snapshot.val().heightIN + '"]').attr('selected', '');
+				$('#age-input').val(snapshot.val().age);
+				$('select [value="' + snapshot.val().gender + '"]').attr('selected', '');
+				$('select [value="' + snapshot.val().activityLevel + '"]').attr('selected', '');
+				$('select [value="' + snapshot.val().goal + '"]').attr('selected', '');
+			}
+			}, function(error) {
+				console.log('Error: ' + error.code);
+			});
 		} else {
 			//	redirect to homepage if not logged in
-			window.location.href='index.html';
+			window.location.href='../index.html';
 		}
 	});
 	
-	//	User Menu event listeners
+	//	User Menu Logout event listener
 	$(document).on('click', '#logout', logOut);
 	
-	//	ToDo:	Set up calorie calculator event listener(s)
-	//	or preventDefault if using form submit
+	//	Calorie calculator Submit event listener
+	$('#calculator-submit').click(function(event) {
+		event.preventDefault();
+		calculateDailyNutrition();
+	});
 	
-	
-});
+/*
+	//	Calorie calculator Goal Changed event listener
+	$('#goal-input').change(function () {
+		var optionSelected = $(this).find('option:selected');
+		var valueSelected  = optionSelected.val();
+		var textSelected = optionSelected.text();
+		
+		if(textSelected == 'Lose Fat') {
+			var newLabel = $('<label>');
+			newLabel.attr('for', 'intensity-input');
+			newLabel.text('What intensity level would you prefer?');
+			var newSelect = $('<select>');
+			newSelect.attr('id', 'intensity-input');
+			var option1 = $('<option>');
+			option1.text('Light');
+			option1.attr('value', 0.15);
+			var option2 = $('<option>');
+			option2.text('Moderate');
+			option2.attr('value', 0.20);
+			option2.attr('selected', '');
+			var option3 = $('<option>');
+			option3.text('Intense');
+			option3.attr('value', 0.25);
+			newSelect.append(option1, option2, option3)
+			$('#intensity-container').append(newLabel, newSelect);
+		} else {
+			$('#intensity-container').empty();
+		}
+	 });
+*/
+	$('.nutrition-card').click(function() {
+		var intensityLvl = $(this).attr('id');
+		//	update DB with selected data
+		db.ref('users/' + uid + '/userInfo').update({
+			weightLossIntensityLvl: intensityLvl
+		});
+		db.ref('users/' + uid + '/nutritionInfo').update({
+			calories: $(this).attr('data-cal'),
+			proteinCal: $(this).attr('data-protCal'),
+			proteinGrams: $(this).attr('data-protGrams'),
+			fatCal: $(this).attr('data-fatCal'),
+			fatGrams: $(this).attr('data-fatGrams'),
+			saturatedFat: $(this).attr('data-satFat'),
+			monoUnsaturatedFat: $(this).attr('data-mono'),
+			polyUnsaturatedFat: $(this).attr('data-poly'),
+			carbsCal: $(this).attr('data-carbsCal'),
+			carbsGrams: $(this).attr('data-carbsGrams'),
+			fiber: $(this).attr('data-fiber')
+		});
+		
+		//	Change displays
+		if(intensityLvl == 'light') {
+			$('#moderate').addClass('js-hidden');
+			$('#intense').addClass('js-hidden');
+		} else if(intensityLvl == 'moderate') {
+			$('#light').addClass('js-hidden');
+			$('#intense').addClass('js-hidden');
+		} else if(intensityLvl == 'intense') {
+			$('#light').addClass('js-hidden');
+			$('#moderate').addClass('js-hidden');
+		}
+	});
+	 
+});		//	End of document.ready()
