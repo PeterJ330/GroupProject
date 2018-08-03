@@ -1,0 +1,174 @@
+<html>
+
+<head>
+	<script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.3.0/firebase.js"></script>
+	 <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+</head>
+
+<body>
+
+<form>
+	<input type="text">
+	<button type="submit">Add Food</button>
+</form>
+	<div id="showRecent">Show Recent</div>
+	<div id="showFrequent">Show Frequent</div>
+<div id="display"></div>
+
+</body>
+
+<script>
+$(document).ready(function() {
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBoMGE2tup_IQsm5aHnfdlAh4HMLD3J_Yw",
+    authDomain: "login-test-25879.firebaseapp.com",
+    databaseURL: "https://login-test-25879.firebaseio.com",
+    projectId: "login-test-25879",
+    storageBucket: "login-test-25879.appspot.com",
+    messagingSenderId: "127721403757"
+  };
+  firebase.initializeApp(config);
+
+var db = firebase.database();
+var uid = null;
+var today = moment().format('YYYY MM DD');
+todayFormatted = today.replace(/\s/g, '_');
+console.log(today);
+var food = null;
+
+var recentFoods = [];
+
+firebase.auth().onAuthStateChanged(function(user) {
+			
+	if(user) {
+		displayName = user.displayName;
+		uid = user.uid;	
+		
+
+/*
+			db.ref('users/' + uid + '/nutritionInfo/recentFood/').on('child_added',function(snap) {
+				console.log('foodCount function called');
+				if(snap.child(food).child('foodCount').exists()) {
+					db.ref('users/' + uid + '/nutritionInfo/recentFood/' + food + '/foodCount').transaction( function(counter) {
+						return counter +1;
+					});
+				} else {
+					db.ref('users/' + uid + '/nutritionInfo/recentFood/' + food).update({
+						foodCount: 1
+					});
+				}
+			});
+*/
+// 		db.ref('users/' + uid + '/nutritionInfo')
+		
+	} else {
+		//	redirect to homepage if not logged in
+		window.location.href='../index.html';
+	}
+});
+
+
+/*
+db.ref('users/' + uid).on('value', function(snap) {
+	recentFoods = snap.val();
+	console.log('Child Added: ' + snap.val());
+});
+*/
+
+$('button').click(function(event) {
+	event.preventDefault();
+
+		food = $('input').val().trim().toLowerCase();
+	food = food.replace(/\s/g, '_');
+	var timestamp = moment().format('X');
+//	timestamp = moment(timestamp, 'X').format('MMMM DD YYYY');
+	console.log(timestamp);
+	console.log(today);
+	console.log(food);
+
+	db.ref('users/' + uid + '/nutritionInfo/recentFood/' + food).update({
+		'timestamp': timestamp,
+		'food': food
+	}, function(error) {
+		if(error) {
+			console.log(error.code);
+		} else {
+			console.log('DB saved successfully');
+		}
+	});
+	
+	db.ref('users/' + uid + '/nutritionInfo/recentFood/' + food + '/foodCount').transaction( function(counter) {
+		return counter +1;
+	});
+	
+	console.log(db.ref('users/' + uid + '/nutritionInfo/recentFood' + food).child('foodCount'));
+//	db.ref('users/' + uid + '/nutritionInfo/food/list/' + food).transaction(function(foodCount) {
+//		return foodCount + 1;
+//	});
+	
+
+});
+
+console.log('UID: ' + uid);
+	
+
+
+console.log('this code works');
+	
+$('#showRecent').click(function() {
+	console.log(recentFoods);
+	showRecent();
+});
+$('#showFrequent').click(showFrequent);
+
+function showRecent() {
+	
+	$('#display').empty();
+
+	db.ref('users/' + uid + '/nutritionInfo/recentFood/').orderByChild('timestamp').limitToLast(5).on('child_added', function(snap) {
+		console.log(snap.val());
+//		console.log('New Food: ' + snap.val().food);
+		
+		console.log(snap.val());
+		var newDiv = $('<div>').text(snap.val().food);
+// 					var newDiv = $('<div>').text(snap.val());
+		$('#display').append(newDiv);
+
+// 		$('#display').append(snap.val().food);
+		db.ref('users/' + uid + '/nutritionInfo/recentFood/').off();
+	});
+				
+}
+
+function showFrequent() {
+	
+	$('#display').empty();
+
+	db.ref('users/' + uid + '/nutritionInfo/recentFood/').orderByChild('foodCount').limitToLast(5).on('child_added', function(snap) {
+		console.log(snap.val());
+//		console.log('New Food: ' + snap.val().food);
+		
+		console.log(snap.val());
+		var newDiv = $('<div>').text(snap.val().food);
+// 					var newDiv = $('<div>').text(snap.val());
+		$('#display').append(newDiv);
+
+// 		$('#display').append(snap.val().food);
+		db.ref('users/' + uid + '/nutritionInfo/recentFood/').off();
+	});
+				
+}
+
+
+});	// end of docready
+
+
+
+</script>
+
+</html>
