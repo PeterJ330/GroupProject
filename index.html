@@ -17,6 +17,8 @@
 	
 	<!--	jQuery	-->
 	<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+	<!--	MomentJS	-->
+	<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
 	<!--	Firebase	-->
 	<script src="https://www.gstatic.com/firebasejs/5.3.0/firebase.js"></script>
 	<script src="assets/scripts/database.js"></script>
@@ -41,7 +43,11 @@
 <!-- ----------------------------------------------------------------------------------------------------------- -->
 
 	<main role="main">
-	
+		<div class="content-container">
+			<div id="home-default">
+				<h2>Home Page</h2>
+			</div>
+		</div>
 	</main>
 
 	<footer role="contentinfo">
@@ -54,10 +60,17 @@
 
 $(document).ready(function() {
 	
+	var today = moment().format('YYYY MM DD');
+	today = today.replace(/\s/g, '_');
+	console.log('Today: ' + today);
+	var yesterday = moment(today, 'YYYY MM DD').subtract(1, 'days').format('YYYY MM DD');
+	yesterday = yesterday.replace(/\s/g, '_');
+	console.log('Yesterday: ' + yesterday);
+	
 	firebase.auth().onAuthStateChanged(function(user) {
 			
 		if(user) {
-			
+			//	change user displays if user is logged in
 			$('.username').text(user.displayName);
 			$('.dropdown').empty();
 			var logout = $('<div>');
@@ -66,7 +79,83 @@ $(document).ready(function() {
 			var profile = $('<div>');
 			profile.text('Profile');
 			$('.dropdown').append(logout, profile);
+			
+// 			console.log(db.ref('users' + user.uid).childExists('dailyLogs'));
+			
+			//	The below code handles updating user login data, including if they have never logged in before
+			db.ref('users/' + user.uid).once("value", function(snapshot) {
+				console.log(snapshot.child('dailyLogs').exists());
+				console.log(snapshot.child('userInfo').child('lastLogin').exists());
+			//	if user has logged in before, check if they have logged in today already
+// 				if (snapshot.child("dailyLogs").exists()) {
+				if(snapshot.child('userInfo').child('lastLogin').exists()) {
+					console.log('dailyLogs exists');
+					//	if today exists, user has already logged in today
+					if(snapshot.child('dailyLogs').child(today).exists()) {
+						
+						console.log(today + ' (today) directory exists');
+						console.log('Today Login: ' + snapshot.val().dailyLogs[today].login);
+						//console.log(snapshot.val().dailyLogs[today]);
+					} else {
+						//	if today does not exist, create it and login for the day
+						db.ref('users/' + user.uid + '/dailyLogs/' + today).update({
+							'login': true
+						});
+						console.log('Logged in for the day');
+						console.log('lastLogin: ' + snapshot.child('userInfo').child('lastLogin').val());
+
+						if(snapshot.child('userInfo').child('lastLogin').val() == yesterday) {
+							// if lastLogin was yesterday, increase loginStreak
+							db.ref('users/' + user.uid + '/userInfo/loginStreak').transaction(function(currentStreak) {
+								return currentStreak +1;
+							});
+						} else {
+							//	reset loginStreak if user did not login the previous day
+							db.ref('users/' + user.uid + '/userInfo').update({
+								loginStreak: 1
+							});
+						}
+						//	after updating the loginStreak, set the last time logged in to today
+						db.ref('users/' + user.uid + '/userInfo').update({
+							'lastLogin': today
+						});
+					}
+					
+				} else {
+			//	if user has never logged in before, create dailyLogs and log them in for today
+					console.log('dailyLogs does not exist');
+					var container = $('<div>');
+					container.attr('id', 'tutorial-container');
+					
+					var header = $('<h2>');
+					header.text('Congratulations on starting your new Fitness Journey!');
+					var caption = $('<div>');
+					caption.text('Click the button below to get your recommended nutrition numbers or skip this step and venture forth on your own!');
+					var button = $('<div>');
+					button.addClass('button');
+					button.attr('id', 'start-tutorial');
+					button.text('LETS GET STARTED!');
+					var skip = $('<div>');
+					skip.attr('id', 'skip');
+					skip.text('No thanks, I got this!');
+					
+					$('#home-default').addClass('js-hidden');
+					
+					container.append(header, caption, button, skip);
+					$('.content-container').append(container);
+					
+					db.ref('users/' + user.uid + '/dailyLogs/' + today).update({
+						'login': true
+					});
+					db.ref('users/' + user.uid + '/userInfo').update({
+						'lastLogin': today,
+						'loginStreak': 1
+					});
+				}
+			});	
+
 		} else {
+			//	change user displays if user is logged out
 			$('.username').text('Get Fit!');
 			$('.dropdown').empty();
 			var login = $('<div>');
@@ -84,6 +173,12 @@ $(document).ready(function() {
 	$(document).on('click', '#logout', logOut);
 	$(document).on('click', '#login', function() { window.location.href='login/login.html' });
 	$(document).on('click', '#signup', function() { window.location.href='login/signup.html' });
+	
+	$(document).on('click', '#start-tutorial', function() { window.location.href='nutrition/calculator.html' });
+	$(document).on('click', '#skip', function() {
+		$('#home-default').removeClass('js-hidden');
+		$('#tutorial-container').addClass('js-hidden');
+	})
 
 });
 	

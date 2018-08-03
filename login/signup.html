@@ -96,7 +96,7 @@ $(document).ready(function() {
 				
 			}).then(function() {
 				
-				db.ref('users/' + user.uid).set({
+				db.ref('users/' + user.uid + '/userInfo').set({
 					displayName: user.displayName,
 					email: user.email
 				});
