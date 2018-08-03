@@ -1,0 +1,19 @@
+header {
+    text-align: center;
+}
+
+#foodReport {
+    float: left;
+}
+
+footer {
+    text-align: center;
+    margin-top: 25px;
+    position: fixed;
+    bottom: 0%;
+}
+
+#display {
+    float: left;
+    clear: both;
+}

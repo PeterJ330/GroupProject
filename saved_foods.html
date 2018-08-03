@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Nutrition Foods</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <!-- nutritionAPI.css -->
+    <link rel="stylesheet" href="nutritionAPI.css">
+
+</head>
+
+<body>
+    <header>
+        <h1>Saved API</h1>
+    </header>
+    <br>
+    <div class="container">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <button id="food" class="btn btn-outline-secondary" type="button">Food</button>
+            </div>
+            <input id="foodInput" type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <button id="nutrients" class="btn btn-outline-secondary" type="button">Nutrients</button>
+            </div>
+            <input id="nutrientInput" type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
+        </div>
+        <div id="jsonFood"></div>
+        <!-- <div id="foodReport"></div> -->
+        <p id="foodReport"></p>
+        <div id="jsonList"></div>
+        <br>
+        <div id="display">
+            <div id="foodName"></div>
+            <div id="nutrientReport"></div>
+            <button id="add" class="btn btn-outline-primary" type="button">Add to Daily Nutrition</button>
+            <button id="save" class="btn btn-outline-primary" type="button">Save to My Foods</button>
+        </div>
+
+        <div id="foodsByNutrient"></div>
+
+
+
+    </div>
+    <!-- closes container -->
+
+    <footer></footer>
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <!-- nutritionAPI.js -->
+    <script src="nutritionByFood.js"></script>
+</body>
+
+</html>
