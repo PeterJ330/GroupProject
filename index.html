@@ -19,6 +19,8 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 	<!--	MomentJS	-->
 	<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+	<!--	IonIcons	-->
+	<script src="https://unpkg.com/ionicons@4.2.4/dist/ionicons.js"></script>
 	<!--	Firebase	-->
 	<script src="https://www.gstatic.com/firebasejs/5.3.0/firebase.js"></script>
 	<script src="assets/scripts/database.js"></script>
@@ -31,27 +33,180 @@
 <body>
 
 	<header role="header">
-		<h1><a href="index.html">App Name</a></h1>
+		<h1><a href="index.html">My Journey</a></h1>
 		<nav class="user-menu" role="navigation">
 			<div class="username"></div>
+			<div class="dropdown-wrapper">
 				<div class="dropdown">
 					<div id="logout"></div>
 				</div>
+			</div>
 		</nav>
 	</header>
 	
 <!-- ----------------------------------------------------------------------------------------------------------- -->
 
 	<main role="main">
-		<div class="content-container">
-			<div id="home-default">
-				<h2>Home Page</h2>
+		<div class="main-container">
+			
+			<div id="welcome" class="js-hidden">
+				<h2>Welcome to My Journey!</h2>
+				<div class="content-container">
+					<div class="welcome-text"><a href="login/signup.html">Sign Up</a>/<a href="login/login.html">Login</a> to get started!</div>
+				</div>
 			</div>
+			
+			<div id="home-default" class="js-hidden menu" data-menu="0">
+				<h2>My Progress</h2>
+				<div class="content-container">
+<!-- 					<div class="nutrient-container"> -->
+						<div class="nutrient-text">Calories (<span id="cal-current"></span> / <span id="cal-total"></span>)</div>
+						<div class="prog-bar" id="cal-bar">
+							<span class="prog-text" id="cal-text"></span>
+							<div class="prog" id="cal-prog"></div>
+						</div>
+<!-- 					</div> -->
+					
+					<div class="nutrient-text">Protein (<span id="prot-current"></span> / <span id="prot-total"></span>)</div>
+					<div class="prog-bar" id="prot-bar">
+						<span class="prog-text" id="prot-text"></span>
+						<div class="prog" id="prot-prog"></div>
+					</div>
+					<div class="nutrient-text">Fat (<span id="fat-current"></span> / <span id="fat-total"></span>)</div>
+					<div class="prog-bar" id="fat-bar">
+						<span class="prog-text" id="fat-text"></span>
+						<div class="prog" id="fat-prog"></div>
+					</div>
+					<div class="nutrient-text">Carbs (<span id="carbs-current"></span> / <span id="carbs-total"></span>)</div>
+					<div class="prog-bar" id="carbs-bar">
+						<span class="prog-text" id="carbs-text"></span>
+						<div class="prog" id="carbs-prog"></div>
+					</div>
+					
+				</div>
+			</div>
+			
+			<div id="tutorial" class="js-hidden menu" data-menu="1"></div>
+			
+			<div id="calculator" class="js-hidden menu" data-menu="2">
+				<div class="" id="calculator-form-display">
+					<h2>Calorie Calculator</h2>
+					<form>
+						<label for="weight-input">Weight (lb)</label>
+						<input type="number" id="weight-input" placeholder="Weight...">
+						<label for="height-input">Height</label>
+						<select id="height-input">
+							<option value="54">4' 6"</option>
+							<option value="55">4' 7"</option>
+							<option value="56">4' 8"</option>
+							<option value="57">4' 9"</option>
+							<option value="58">4' 10"</option>
+							<option value="59">4' 11"</option>
+							<option value="60">5' 0"</option>
+							<option value="61">5' 1"</option>
+							<option value="62">5' 2"</option>
+							<option value="63">5' 3"</option>
+							<option value="64">5' 4"</option>
+							<option value="65">5' 5"</option>
+							<option value="66">5' 6"</option>
+							<option value="67">5' 7"</option>
+							<option value="68" selected>5' 8"</option>
+							<option value="69">5' 9"</option>
+							<option value="70">5' 10"</option>
+							<option value="71">5' 11"</option>
+							<option value="72">6' 0"</option>
+							<option value="73">6' 1"</option>
+							<option value="74">6' 2"</option>
+							<option value="75">6' 3"</option>
+							<option value="76">6' 4"</option>
+							<option value="77">6' 5"</option>
+							<option value="78">6' 6"</option>
+							<option value="79">6' 7"</option>
+							<option value="80">6' 8"</option>
+							<option value="81">6' 9"</option>
+							<option value="82">6' 10"</option>
+							<option value="83">6' 11"</option>
+							<option value="84">7' 0"</option>
+							<option value="85">7' 1"</option>
+							<option value="86">7' 3"</option>
+							<option value="87">7' 4"</option>
+							<option value="88">7' 5"</option>
+							<option value="89">7' 6"</option>
+						</select>
+						<label for="age-input">Age</label>
+						<input type="number" id="age-input" placeholder="Age...">
+						<label for="gender-input">Gender</label>
+						<select id="gender-input">
+							<option value="male">Male</option>
+							<option value="female">Female</option>
+						</select>
+						<label for="activity-input">Activity Level</label>
+						<select id="activity-input">
+							<option value="0">Sedentary (Little/No Exercise)</option>
+							<option value="2" selected>Somewhat Active (Exercise 1-3 times/week)</option>
+							<option value="4">Moderately Active (Exercise 3-5 times/week)</option>
+							<option value="6.5">Very Active (Exercise 6-7 times/week)</option>
+						</select>
+						<!--
+<label for="goal-input">Goal</label>
+						<select id="goal-input">
+							<option value="lose">Lose Fat</option>
+							<option value="maintain" selected>Maintain Weight</option>
+							<option value="gain">Gain Muscle</option>
+						</select>
+-->
+			<!-- 			<div id="intensity-container"></div> -->
+			
+						<button class="button" type="submit" id="calculator-submit">Get My Numbers!</button>
+					</form>
+				</div>
+			</div>
+			
+			<div id="results" class="js-hidden menu" data-menu="3">
+
+				<h2 class="results-header">Daily Goals</h2>
+				<div class="card-container">
+					<div class="card nutrition-card" id="light">
+						<h3>Light</h3>
+						<p><span id="lt-cal-display"></span> cal</p>
+						<p><span id="lt-prot-display"></span>g prot</p>
+						<p><span  id="lt-fat-display"></span>g fat</p>
+						<p><span id="lt-carbs-display"></span>g carbs</p>
+					</div>
+					<div class="card nutrition-card" id="moderate">
+						<h3>Moderate</h3>
+						<p><span id="mod-cal-display"></span> cal</p>
+						<p><span id="mod-prot-display"></span>g prot</p>
+						<p><span  id="mod-fat-display"></span>g fat</p>
+						<p><span id="mod-carbs-display"></span>g carbs</p>
+					</div>
+					<div class="card nutrition-card" id="intense">
+						<h3>Intense</h3>
+						<p><span id="int-cal-display"></span> cal</p>
+						<p><span id="int-prot-display"></span>g prot</p>
+						<p><span  id="int-fat-display"></span>g fat</p>
+						<p><span id="int-carbs-display"></span>g carbs</p>
+					</div>
+				</div>
+				<div class="results-text">Choose your preferred intensity level</div>
+				
+			</div>
+			
 		</div>
 	</main>
 
 	<footer role="contentinfo">
-	
+		<nav class="tabs-container">
+			<div class="tabs" id="workouts" data-tab="0">
+				Workouts
+			</div>
+			<div class="tabs home-tab selected-tab" data-tab="1" id="home">
+				<ion-icon name="home"></ion-icon>
+			</div>
+			<div class="tabs" data-tab="2" id="nutrition">
+				Nutrition
+			</div>
+		</nav>
 	</footer>
 
 </body>
@@ -66,6 +221,20 @@ $(document).ready(function() {
 	var yesterday = moment(today, 'YYYY MM DD').subtract(1, 'days').format('YYYY MM DD');
 	yesterday = yesterday.replace(/\s/g, '_');
 	console.log('Yesterday: ' + yesterday);
+	var menu = 'home';
+	var uid = '';
+	
+	var calTotal = 'N/A';
+	var calCurrent = 1259;
+	var protTotal = 'N/A';
+	var protCurrent = 50;
+	var fatTotal = 'N/A';
+	var fatCurrent = 50;
+	var carbsTotal = 'N/A';
+	var carbsCurrent = 50;
+	
+	var goal;
+	var calculator = false;
 	
 	firebase.auth().onAuthStateChanged(function(user) {
 			
@@ -80,12 +249,20 @@ $(document).ready(function() {
 			profile.text('Profile');
 			$('.dropdown').append(logout, profile);
 			
+//			$('#home-default').removeClass('js-hidden');
+			
+			uid = user.uid;
+			
 // 			console.log(db.ref('users' + user.uid).childExists('dailyLogs'));
 			
 			//	The below code handles updating user login data, including if they have never logged in before
 			db.ref('users/' + user.uid).once("value", function(snapshot) {
+				
 				console.log(snapshot.child('dailyLogs').exists());
 				console.log(snapshot.child('userInfo').child('lastLogin').exists());
+				
+				$('#home-default').removeClass('js-hidden');
+				
 			//	if user has logged in before, check if they have logged in today already
 // 				if (snapshot.child("dailyLogs").exists()) {
 				if(snapshot.child('userInfo').child('lastLogin').exists()) {
@@ -125,24 +302,29 @@ $(document).ready(function() {
 			//	if user has never logged in before, create dailyLogs and log them in for today
 					console.log('dailyLogs does not exist');
 					var container = $('<div>');
-					container.attr('id', 'tutorial-container');
+					container.attr('id', 'tutorial-container').addClass('content-container');
 					
 					var header = $('<h2>');
 					header.text('Congratulations on starting your new Fitness Journey!');
-					var caption = $('<div>');
+					var caption = $('<div>').addClass('tutorial-text');
 					caption.text('Click the button below to get your recommended nutrition numbers or skip this step and venture forth on your own!');
 					var button = $('<div>');
-					button.addClass('button');
+					button.addClass('tutorial-card');
 					button.attr('id', 'start-tutorial');
-					button.text('LETS GET STARTED!');
+					button.text('GET STARTED!');
 					var skip = $('<div>');
 					skip.attr('id', 'skip');
-					skip.text('No thanks, I got this!');
+					skip.text('No thanks!');
+					skip.addClass('tutorial-card');
 					
+					$('#tutorial').removeClass('js-hidden');
+					$('#welcome').addClass('js-hidden');
 					$('#home-default').addClass('js-hidden');
 					
-					container.append(header, caption, button, skip);
-					$('.content-container').append(container);
+					var buttonContainer = $('<div>').addClass('button-container');
+					buttonContainer.append(button, skip);
+					container.append(header, caption, buttonContainer);
+					$('#tutorial').append(container);
 					
 					db.ref('users/' + user.uid + '/dailyLogs/' + today).update({
 						'login': true
@@ -152,11 +334,92 @@ $(document).ready(function() {
 						'loginStreak': 1
 					});
 				}
-			});	
+			});
+			
+			db.ref('users/' + uid + '/nutritionInfo').on('value', function(snapshot) {
+				if(snapshot) {
+					console.log('Snapshot: ' + snapshot);
+					calTotal = parseInt(snapshot.val().calories);
+					protTotal = parseInt(snapshot.val().proteinGrams);
+					fatTotal = parseInt(snapshot.val().fatGrams);
+					carbsTotal = parseInt(snapshot.val().carbsGrams);
+					
+					$('#cal-current').text(calCurrent);
+					$('#cal-total').text(calTotal);
+					$('#prot-current').text(protCurrent);
+					$('#prot-total').text(protTotal);
+					$('#fat-current').text(fatCurrent);
+					$('#fat-total').text(fatTotal);
+					$('#carbs-current').text(carbsCurrent);
+					$('#carbs-total').text(carbsTotal);
+					
+					var calPercent = calCurrent/calTotal*100;
+					var protPercent = protCurrent/protTotal*100;
+					var fatPercent = fatCurrent/fatTotal*100;
+					var carbsPercent = carbsCurrent/carbsTotal*100;
+					if(calPercent % 0 != 1) {
+						calPercent = calPercent.toFixed(2);
+					}
+					if(protPercent % 0 != 1) {
+						protPercent = protPercent.toFixed(2);
+					}
+					if(fatPercent % 0 != 1) {
+						fatPercent = fatPercent.toFixed(2);
+					}
+					if(carbsPercent % 0 != 1) {
+						carbsPercent = carbsPercent.toFixed(2);
+					}
+					if(calPercent > 100) {
+						$('#cal-text').addClass('red');
+					} else {
+						$('#cal-text').removeClass('red');
+					}
+					if(protPercent > 100) {
+						$('#prot-text').addClass('red');
+					} else {
+						$('#prot-text').removeClass('red');
+					}
+					if(fatPercent > 100) {
+						$('#fat-text').addClass('red');
+					} else {
+						$('#fat-text').removeClass('red');
+					}
+					if(carbsPercent > 100) {
+						$('#carbs-text').addClass('red');
+					} else {
+						$('#carbs-text').removeClass('red');
+					}
+					
+					$('#cal-text').text(calPercent + ' %');
+					$('#cal-prog').css('width', calPercent + '%');
+					$('#prot-text').text(protPercent + ' %');
+					$('#prot-prog').css('width', protPercent + '%');
+					$('#fat-text').text(fatPercent + ' %');
+					$('#fat-prog').css('width', fatPercent + '%');
+					$('#carbs-text').text(carbsPercent + ' %');
+					$('#carbs-prog').css('width', carbsPercent + '%');
+				}
+			}, function(error) {
+				console.log('Error: ' + error.code);
+			});
+			
+			db.ref('users/' + uid + '/userInfo').on('value', function(snapshot) {
+			if(snapshot) {
+				//	if userInfo exists, fill in the calculator form with the user's previous values
+				$('#weight-input').val(snapshot.val().weightLB);
+				$('select [value="' + snapshot.val().heightIN + '"]').attr('selected', '');
+				$('#age-input').val(snapshot.val().age);
+				$('select [value="' + snapshot.val().gender + '"]').attr('selected', '');
+				$('select [value="' + snapshot.val().activityLevel + '"]').attr('selected', '');
+				$('select [value="' + snapshot.val().goal + '"]').attr('selected', '');
+			}
+			}, function(error) {
+				console.log('Error: ' + error.code);
+			});
 
 		} else {
 			//	change user displays if user is logged out
-			$('.username').text('Get Fit!');
+			$('.username').text('Begin Your Journey!');
 			$('.dropdown').empty();
 			var login = $('<div>');
 			login.text('Log In');
@@ -165,6 +428,13 @@ $(document).ready(function() {
 			signup.text('Sign Up');
 			signup.attr('id', 'signup');
 			$('.dropdown').append(login, signup);
+			
+			var dataMenus = document.getElementsByClassName('menu');
+			console.log('data-menus length: ' + dataMenus.length);
+			for(var i = 0; i < dataMenus.length; i++) {
+				$('[data-menu="' + i + '"]').addClass('js-hidden');
+			}
+			$('#welcome').removeClass('js-hidden');
 		}
 	});
 
@@ -174,12 +444,74 @@ $(document).ready(function() {
 	$(document).on('click', '#login', function() { window.location.href='login/login.html' });
 	$(document).on('click', '#signup', function() { window.location.href='login/signup.html' });
 	
-	$(document).on('click', '#start-tutorial', function() { window.location.href='nutrition/calculator.html' });
+	$(document).on('click', '#start-tutorial', tutorial);
 	$(document).on('click', '#skip', function() {
 		$('#home-default').removeClass('js-hidden');
 		$('#tutorial-container').addClass('js-hidden');
-	})
-
+	});
+	$('.tabs').click(function() {
+		menu = $(this).attr('id');
+		var tabs = document.getElementsByClassName('tabs');
+		var menuIndex = $(this).attr('data-tab');
+		for(var i = 0; i < tabs.length; i++) {
+			if(menuIndex == i) {
+				$('[data-tab="' + i + '"]').addClass('selected-tab');
+			} else {
+				$('[data-tab="' + i + '"]').removeClass('selected-tab');
+			}
+		}
+	});
+	
+	$(document).on('click', '.goal-card', function() {
+		var value = $(this).attr('id');
+		if(value == 'lose' || value == 'maintain' || value == 'gain') {
+			goal = value;
+		}
+		$('#tutorial').addClass('js-hidden');
+		$('#calculator').removeClass('js-hidden');
+		calculator = true;
+	});
+	
+	//	Calorie calculator Submit event listener
+	$('#calculator-submit').click(function(event) {
+		event.preventDefault();
+		calculateDailyNutrition(uid, goal);
+	});
+	
+	$('.nutrition-card').click(function() {
+		var intensityLvl = $(this).attr('id');
+		//	update DB with selected data
+		db.ref('users/' + uid + '/userInfo').update({
+			weightLossIntensityLvl: intensityLvl
+		});
+		db.ref('users/' + uid + '/nutritionInfo').update({
+			calories: $(this).attr('data-cal'),
+			proteinCal: $(this).attr('data-protCal'),
+			proteinGrams: $(this).attr('data-protGrams'),
+			fatCal: $(this).attr('data-fatCal'),
+			fatGrams: $(this).attr('data-fatGrams'),
+			saturatedFat: $(this).attr('data-satFat'),
+			monoUnsaturatedFat: $(this).attr('data-mono'),
+			polyUnsaturatedFat: $(this).attr('data-poly'),
+			carbsCal: $(this).attr('data-carbsCal'),
+			carbsGrams: $(this).attr('data-carbsGrams'),
+			fiber: $(this).attr('data-fiber')
+		});
+		
+		//	Change displays
+		$('.card-container').empty();
+		$('.results-header').text('You\'re ready to start your Journey!');
+		var newCard = $('<div>').addClass('results-card');
+		var cals = $('<h3>').text($(this).attr('data-cal') + ' cals');
+		var prot = $('<p>').text($(this).attr('data-protGrams') + 'g prot');
+		var fat = $('<p>').text($(this).attr('data-fatGrams') + 'g fat');
+		var carbs = $('<p>').text($(this).attr('data-carbsGrams') + 'g carbs');
+		newCard.append(cals, prot, fat, carbs);
+		
+		$('.results-text').text('Venture forth, log your nutrition/workouts and have fun!');
+		$('.card-container').append(newCard);
+	});
+	
 });
 	
 </script>
