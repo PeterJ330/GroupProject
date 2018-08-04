@@ -29,7 +29,7 @@
 <body>
 
 	<header role="header">
-		<h1><a href="../index.html">App Name</a></h1>
+		<h1><a href="../index.html">My Journey</a></h1>
 		<nav class="user-menu" role="navigation">
 			<div class="username"></div>
 				<div class="dropdown">
@@ -44,26 +44,38 @@
 	
 	<div class="container">
 		<h2>Create Account</h2>
-		<div>Signing up is free and only takes a few seconds</div>
+		<div class="container-text">Signing up is free and only takes a few seconds</div>
 		<form>
 		<!--
 			<input type="text" id="fname" placeholder="first name...">
 			<input type="text" id="lname" placeholder="last name...">
 		-->
-			<input type="text" id="username" placeholder="username...">
-			<input type="email" id="email" placeholder="email...">
-			<input type="password" id="password" placeholder="password...">
-			<ion-icon class="help-icon" name="help-circle"></ion-icon>
-			<div class="help-hoverable js-hidden">
-				<p>Passwords Must meet the following requirements:</p>
-				<p>Contain at least one capital and one lowercase letter</p>
-				<p>Contain at least one numeric character</p>
-				<p>Contain at least one non-alphanumeric special character</p>
-				<p>Contain no whitespaces</p>
-				<p>Be between 6 and 15 characters long</p>
+			<div class="icon-container">
+				<input class="inputs" type="text" id="username" placeholder="username...">
+				<div class="error-icon js-hidden" id="username-icon" name="alert">!</div>
 			</div>
-			<input type="password" id="password-confirm" placeholder="confirm password...">
-			<button type="submit" id="signup-btn">Sign Up!</div>
+			<div class="icon-container">
+				<input class="inputs" type="email" id="email" placeholder="email...">
+				<div class="error-icon js-hidden" id="email-icon" name="alert">!</div>
+			</div>
+			<div class="icon-container">
+				<input class="inputs" type="password" id="password" placeholder="password...">
+<!-- 				<ion-icon class="help-icon" name="help-circle"></ion-icon> -->
+				<div class="help-icon" id="password-icon" name="alert">?</div>
+				<div class="tooltip-text js-hidden">
+					<h3>Passwords Must meet the following requirements:</h3>
+					<p>&middot; Contain at least one capital and one lowercase letter</p>
+					<p>&middot; Contain at least one numeric character</p>
+					<p>&middot; Contain at least one non-alphanumeric special character</p>
+					<p>&middot; Contain no whitespaces</p>
+					<p>&middot; Be between 6 and 15 characters long</p>
+				</div>
+			</div>
+			<div class="icon-container">
+				<input class="inputs" type="password" id="password-confirm" placeholder="confirm password...">
+				<div class="error-icon js-hidden" id="confirm-icon" name="alert">!</div>
+			</div>
+			<button type="submit" id="signup-btn" class="button">Sign Up!</button>
 			<p>Already have an account? <a href="login.html">Login!</a></p>
 		</form>
 			<div id="errors-display">
@@ -116,9 +128,9 @@ $(document).ready(function() {
 	});
 	//	Toggles Help Info on hover
 	$('.help-icon').hover(function() {
-		$('.help-hoverable').removeClass('js-hidden');
+		$('.tooltip-text').removeClass('js-hidden');
 	}, function() {
-		$('.help-hoverable').addClass('js-hidden');
+		$('.tooltip-text').addClass('js-hidden');
 	});
 });
 
