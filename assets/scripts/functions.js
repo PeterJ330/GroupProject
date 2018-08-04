@@ -15,17 +15,27 @@ function escapeHTML(string) {
   
 }
 
-function displayErrors(errorMsg) {
+function displayErrors(input, errorMsg) {
 	$('#errors-display').empty();
-	var errorsDiv = $('<div>');
-	errorsDiv.text('Please fix the following errors:');
+	var errorsDiv = $('<h3>');
+	errorsDiv.text('Please fix the following error:');
 	errorsDiv.addClass('errors-container');
-	var error = $('<div>');
-	error.text(errorMsg);
+	var error = $('<p>');
+	error.html('&middot; ' + errorMsg);
 	error.addClass('errors');
 	
-	$('#errors-display').append(error);
+	errorsDiv.append(error);
+	$('#errors-display').append(errorsDiv);
 	$('#errors-display').removeClass('js-hidden');
+	
+	$('#' + input + '-icon').removeClass('js-hidden');
+	var inputs = document.getElementsByTagName('input');
+	for(var i = 0; i < inputs.length; i++) {
+		$('input').removeClass('error');
+	}
+	if(input == 'password') {
+		$('#password-icon').text('!').addClass('error-icon');
+	}
 }
 
 function signUp() {
@@ -35,6 +45,11 @@ function signUp() {
 	var passwordConfirm = $('#password-confirm').val().trim();
 	username = $('#username').val().trim();
 	var errors = false;
+	
+	$('#username-icon').addClass('js-hidden');
+	$('#email-icon').addClass('js-hidden');
+	$('#password-icon').text('?').removeClass('error-icon');
+	$('#confirm-icon').addClass('js-hidden');
 
 	//	email/password validatoins should go here
 	//	Password Requirements (in order as they appear in the regex below):
@@ -54,67 +69,68 @@ function signUp() {
 		return;
 	}
 */
-	if(passwordConfirm == '') {
-		displayErrors ('Please confirm password');
+	if(username == '') {
+		displayErrors ('username', 'Username required');
 		errors = true;
-		$('#password-confirm').focus();
-	}
+		$('#username').focus().addClass('error');
+	} else if(!/^[A-Za-z0-9_-]*$/.test(username)) {
+		displayErrors ('username', 'Username can only contain letters, numbers, dashes and underscores');
+		errors = true;
+		$('#username').focus().addClass('error');
+	} else if(!/(^.{4,25}$)/.test(username)) {
+		displayErrors ('username', 'Username must be between 4 and 25 characters long');
+		errors = true;
+		$('#username').focus().addClass('error');
+	} else
+
+	if(email == '') {
+		displayErrors ('email', 'Email is required');
+		errors = true;
+		$('#email').focus().addClass('error');
+	} else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
+		displayErrors ('email', 'Email address is not valid');
+		errors = true;
+		$('#email').focus().addClass('error');
+	} else
 	
 	if(password == '') {
-		displayErrors ('Password is required');
+		displayErrors ('password', 'Password is required');
 		errors = true;
-		$('#password').focus();
+		$('#password').focus().addClass('error');
 	} else if(!/(?=.*[A-Z])/.test(password)) {
-		displayErrors('Password requires a capital letter');
+		displayErrors('password', 'Password requires a capital letter');
 		errors = true;
-		$('#password').focus();
+		$('#password').focus().addClass('error');
 	} else if(!/(?=.*[a-z])/.test(password)) {
-		displayErrors('Password requires a lowercase letter');
+		displayErrors('password', 'Password requires a lowercase letter');
 		errors = true;
-		$('#password').focus();
+		$('#password').focus().addClass('error');
 	} else if(!/(?=^\S*$)/.test(password)) {
-		displayErrors('Password cannot contain any white spaces');
+		displayErrors('password', 'Password cannot contain any white spaces');
 		errors = true;
-		$('#password').focus();
+		$('#password').focus().addClass('error');
 	} else if (!/(?=.*\d)/.test(password)) {
-		displayErrors('Password requires a number');
+		displayErrors('password', 'Password requires a number');
 		errors = true;
-		$('#password').focus();
+		$('#password').focus().addClass('error');
 	} else if(!/(?=.*[\`\~\!\@\#\$\%\^\&\*\(\)\-\_\=\+\[\]\{\}\\\|\;\:\'\"\,\.\<\>\/\?])/.test(password)) {
-		displayErrors('Password requires a non-alphanumeric character');
+		displayErrors('password', 'Password requires a non-alphanumeric character');
 		errors = true;
-		$('#password').focus();
+		$('#password').focus().addClass('error');
 	} else if(!/(^.{6,15}$)/.test(password)) {
-		displayErrors('Password must be between 6 and 15 characters');
+		displayErrors('password', 'Password must be between 6 and 15 characters');
 		errors = true;
-		$('#password').focus();
+		$('#password').focus().addClass('error');
+	} else 
+	
+	if(passwordConfirm == '') {
+		displayErrors ('confirm', 'Please confirm password');
+		errors = true;
+		$('#password-confirm').focus().addClass('error');
 	} else if(password != passwordConfirm) {
-		displayErrors('Passwords do not match');
+		displayErrors('confirm', 'Passwords do not match');
 		errors = true;
-		$('#password').focus();
-	}
-	
-	if(email == '') {
-		displayErrors ('Email is required');
-		errors = true;
-		$('#email').focus();
-	} else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
-		displayErrors ('Email address is not valid');
-		errors = true;
-		$('#email').focus();
-	}
-	
-	if(username == '') {
-		displayErrors ('Username required');
-		errors = true;
-		$('#username').focus();
-	} else if(!/^[A-Za-z0-9_]*$/.test(username)) {
-		displayErrors ('Username can only contain letters, numbers and underscores');
-		errors = true;
-		$('#username').focus();
-	} else if(!/(^.{4,25}$)/.test(password)) {
-		displayErrors ('Username must be between 4 and 25 characters long');
-		errors = true;	
+		$('#password-confirm').focus().addClass('error');
 	}
 	
 	if(!errors) {
@@ -124,9 +140,9 @@ function signUp() {
 			var errorMessage = error.message;
 	
 			if(errorCode == 'auth/weak-password') {
-				displayErrors('The password is too weak.');
+				displayErrors('password', 'The password is too weak.');
 			} else {
-				displayErrors(errorMessage);
+				displayErrors('email', errorMessage);
 			}
 			console.log(error);
 		});
@@ -142,6 +158,9 @@ function sendEmailVerification() {
 function signIn() {
 	var errors = false;
 	
+	$('#email-icon').addClass('js-hidden');
+	$('#password-icon').addClass('js-hidden');
+	
 	if(firebase.auth().currentUser) {
 		//	If user is signed in, sign them out
 		firebase.auth().signOut();
@@ -150,12 +169,12 @@ function signIn() {
 		var password = $('#password').val().trim();
 		
 		if(email == '') {
-			displayErrors ('Email required');
-			$('#email').focus();
+			displayErrors ('email', 'Email required');
+			$('#email').focus().addClass('error');
 			errors = true;
 		} else if(password == '') {
-			displayErrors ('Password required');
-			$('#password').focus();
+			displayErrors ('password', 'Password required');
+			$('#password').focus().addClass('error');
 			errors = true;
 		}
 	
@@ -166,9 +185,11 @@ function signIn() {
 				var errorMessage = error.message;
 					
 				if(errorCode === 'auth/wrong-password') {
-					displayErrors('Incorrect password');
+					displayErrors('password', 'Incorrect password');
+					$('#password').focus().addClass('error');
 				} else {
-					displayErrors(errorMessage);
+					displayErrors('email', errorMessage);
+					$('#email').focus().addClass('error');
 				}
 				console.log(error);
 			});
@@ -190,9 +211,11 @@ function resetPassword() {
 	
 	var email = $('#email').val().trim();
 	
+	$('#email-icon').addClass('js-hidden');
+	
 	if(email == '') {
-		displayErrors('Email required');
-		$('#email').focus();
+		displayErrors('email', 'Email required');
+		$('#email').focus().addClass('error');
 		errors = true;
 	}
 	
@@ -204,16 +227,18 @@ function resetPassword() {
 			var errorCode = error.code;
 			var errorMessage = error.message;
 			if(errorCode == 'auth/invalid-email') {
-				displayErrors(errorMessage);
+				displayErrors('email', errorMessage);
+				$('#email').focus().addClass('error');
 			} else if(errorCode == 'auth/user-not-found') {
-				displayErrors(errorMessage);
+				displayErrors('email', errorMessage);
+				$('#email').focus().addClass('error');
 			}
 			console.log(error);
 		});
 	}
 }
 
-function calculateDailyNutrition() {
+function calculateDailyNutrition(uid, goal) {
 	
 	//	Capture Inputs
 	var weight = $('#weight-input').val();
@@ -221,7 +246,7 @@ function calculateDailyNutrition() {
 	var activity = $('#activity-input').val();
 	var age = $('#age-input').val();
 	var gender = $('#gender-input').val();
-	var goal = $('#goal-input').val();
+//	var goal = $('#goal-input').val();
 	var calMaintLevel = 0;
 	
 	//	ToDO:	Validations
@@ -306,7 +331,7 @@ Women
 	});
 	
 	//	Display Results
-	$('#calculator-form-display').addClass('js-hidden');
+	$('#calculator').addClass('js-hidden');
 	
 	if(goal == 'lose') {
 		$('#lt-cal-display').text(lightNutrition[0]);
@@ -361,15 +386,17 @@ Women
 			'data-fiber': intenseNutrition[8]
 		});
 	} else {
-		$('#cal-results-display').empty();
-		var newHeader = $('<h2>').text('Daily Goals');
-		var newCard = $('<div>');
+		$('.card-container').empty();
+		$('.results-header').text('You\'re ready to start your Journey!');
+		var newCard = $('<div>').addClass('results-card');
 		var cals = $('<h3>').text(baseNutrition[0] + ' cals');
 		var prot = $('<p>').text(dailyProteinGrams + 'g prot');
 		var fat = $('<p>').text(baseNutrition[2] + 'g fat');
 		var carbs = $('<p>').text(baseNutrition[7] + 'g carbs');
 		newCard.append(cals, prot, fat, carbs);
-		$('#cal-results-display').append(newHeader, newCard);
+
+		$('.results-text').text('Venture forth, log your nutrition/workouts and have fun!');
+		$('.card-container').append(newCard);
 		
 		db.ref('users/' + uid + '/nutritionInfo/').update({
 			calories: baseNutrition[0],
@@ -386,7 +413,7 @@ Women
 		});
 	}
 	
-	$('#cal-results-display').removeClass('js-hidden');
+	$('#results').removeClass('js-hidden');
 }
 
 function calculateNutritionIntensity(intensityLvl, baseCals, dailyProtCal) {
@@ -408,4 +435,37 @@ function calculateNutritionIntensity(intensityLvl, baseCals, dailyProtCal) {
 	dailyNutrition.push(dailyCalories, dailyFatCal, dailyFatGrams, dailySaturatedFat, dailyMonoUnsatFat, dailyPolyUnsatFat, dailyCarbsCal, dailyCarbsGrams, dailyFiber);
 	
 	return dailyNutrition;
+}
+
+function progressDisplays() {
+	
+}
+
+function tutorial() {
+	$('#tutorial').empty();
+	
+	var container = $('<div>');
+	container.attr('id', 'tutorial-container').addClass('content-container');
+			
+	var header = $('<h2>');
+	header.text('What is the primary goal of your Journey?');
+	var loseButton = $('<div>');
+	loseButton.addClass('card goal-card');
+	loseButton.attr('id', 'lose');
+	loseButton.text('LOSE FAT');
+	var maintainButton = $('<div>');
+	maintainButton.addClass('card goal-card');
+	maintainButton.attr('id', 'maintain');
+	maintainButton.text('MAINTAIN WEIGHT');
+	var gainButton = $('<div>');
+	gainButton.addClass('card goal-card');
+	gainButton.attr('id', 'gain');
+	gainButton.text('GAIN MUSCLE');
+	var buttonContainer = $('<div>').addClass('button-container');
+	
+	buttonContainer.append(loseButton, maintainButton, gainButton);
+	container.append(header, buttonContainer);
+	$('#tutorial').append(container);
+					
+	$('#tutorial').removeClass('js-hidden');
 }

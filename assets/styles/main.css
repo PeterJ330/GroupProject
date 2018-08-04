@@ -18,19 +18,585 @@
 	    Global Styles
 ============================*/
 
-
+html {
+	box-sizing: border-box;
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+*, *:before, *:after {
+	box-sizing: inherit;
+}
+body {
+//	background-image: linear-gradient(to left top, #ffb345, #faab3b, #f6a430, #f19c25, #ec9417);
+	background-image: linear-gradient(to left top, #49ab81, #47a67d, #45a17a, #439d76, #419873);
+//	background-image: linear-gradient(to right bottom, #398564, #3b8a68, #3d8e6b, #3f936f, #419873);
+//	background-image: linear-gradient(to left top, #398564, #378060, #357b5d, #337759, #317256);
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
+	min-width: 100vw;
+	min-height: 100vh;
+	width: 100vw;
+	height: 100vh;
+	
+	font-family: 'Roboto Condensed', sans-serif;
+	line-height: 1.6;
+	color: #F0FFF5;
+}
+a,
+a:hover {
+	text-decoration: none;
+	color: inherit;
+}
 
 /*============================
-		   Forms
+	    Page Header
 ============================*/
 
-.help-icon {
+header {
+	width: 100vw;
+	height: 10vh;
+	min-height: 75px;
+	
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+h1 {
+//	color: #F0FFF5;
+	font-family: 'Fredoka One', cursive;
+	font-size: 3em;
+	text-shadow: 2px 2px 15px #317256;
+}
+.user-menu {
+	width: 20%;
+	width: 200px;
+	font-size: 1em;
+//	color: #F0FFF5;
+	font-family: 'Fredoka One', cursive;
+	text-shadow: 2px 2px 15px #317256;
+	position: absolute;
+	right: 2.5%;
+	top: 10%;
+	display: flex;
+	flex-flow: column;
+	justify-content: center;
+	align-items: center;
+}
+.username {
+	font-size: 1.25em;
+}
+.user-menu div {
 	cursor: pointer;
+	width: 100%;
+	text-align: center;
+}
+.dropdown-wrapper {
+	visibility: hidden; /* hides sub-menu */
+	opacity: 0;
+//	position: absolute;
+//  top: 100%;
+//  left: 0;
+	width: 100%;
+	transform: translateY(-2em);
+	z-index: -1;
+	transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s, z-index 0s linear 0.01s;
+}
+.user-menu:focus .dropdown-wrapper,
+.user-menu:focus-within .dropdown-wrapper,
+.user-menu:hover .dropdown-wrapper {
+	visibility: visible; /* shows sub-menu */
+	opacity: 1;
+	z-index: 1;
+	transform: translateY(0%);
+	transition-delay: 0s, 0s, 0.3s; /* this removes the transition delay so the menu will be visible while the other styles transition */
+}
+.dropdown div:hover {
+	color: #317256;
+}
+
+/*============================
+		 Main Page
+============================*/
+
+.main-container {
+	width: 90%;
+	height: 70vh;
+	
+	margin: 1% auto;
+	padding: 2.5em;
+	
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	border-radius: 1em;
+	background-image: linear-gradient(to right bottom, #398564, #3b8a68, #3d8e6b, #3f936f, #419873);
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
+	
+	position: relative;
+}
+#home-default,
+#calculator,
+#results {
+	width: 100%;
+	display: flex;
+	flex-flow: column;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+}
+.main-container h2 {
+	text-align: center;
+	margin-bottom: 1.5em;
+}
+.content-container,
+.card-container {
+	width: 95%;
+	height: auto;
+//	min-height: 35vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	flex-wrap: wrap;
+}
+.card-container h3 {
+	font-size: 1.8em;
+}
+.nutrition-card {
+	width: 31%;
+}
+.results-card {
+//	width: 30%;
+//	min-height: 150px;
+	font-family: 'Fredoka One', cursive;
+	font-size: 1.5em;
+	padding: 1em;
+	border-radius: 1em;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	color: #F0FFF5;
+	background: #317256;
+//	cursor: pointer;
+	text-align: center;
+	text-shadow: 1px 1px 10px #317256;
+	border: none;
+	margin: 0.5em auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-flow: column;
+	
+	width: 75%;
+	min-height: 300px;
+}
+.nutrient-container {
+	width: 100%;
+	margin: 0;
+}
+.nutrient-text {
+	width: 35%;
+	min-width: 35%;
+	margin-right: 0.5em;
+	margin-bottom: 35px;
+	font-size: 1.25em;
+}
+.prog-bar {
+	width: 60%;
+	min-width: 60%;
+	background: lightgray;
+	height: 2.5em;
+	border-radius: 1em;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	margin: 0;
+	margin-bottom: 35px;
+	display: flex;
+/* 	justify-content: center; */
+	text-align: center;
+	align-items: center;
+}
+.prog {
+	height: 100%;
+	border-radius: 1em;
+	background: #317256;
+	width: 0%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+}
+.prog-text {
+	position: absolute;
+	left: 45%;
+	z-index: 1;
+}
+.red {
+	color: red;
+}
+.tutorial-text {
+	font-size: 1.25em;
+	margin-bottom: 1em;
+}
+.results-text,
+.welcome-text {
+	font-size: 2em;
+	margin-top: 1em;
+}
+.welcome-text a:hover {
+	border-bottom: 3px solid #F0FFF5;
+}
+
+/*============================
+		 Calculator
+============================*/
+
+#calculator input,
+#calculator select {
+	margin: 0.5em auto;
+	padding: 0.25em 1em;
+	width: 68%;
+	height: 1.85em;
+	border-radius: 1em;
+	font-size: 1.5em;
+	outline: none;
+	box-shadow: inset 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+//	box-shadow: inset 0 1px 2px rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #000;
+}
+#calculator h2 {
+	margin-bottom: 0.35em;
+}
+#calculator form {
+	width: 100%;
+	display: flex;
+//	flex-flow: column;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-content: center;
+}
+#calculator label {
+	font-size: 2em;
+	width: 30%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+#calculator p {
+	font-size: 1.5em;
+	margin-top: 0.25em;
+}
+#gender {
+	margin-bottom: 1em;
+}
+.card {
+	width: 30%;
+	min-height: 150px;
+	font-family: 'Fredoka One', cursive;
+	font-size: 1.5em;
+	padding: 1em;
+	border-radius: 1em;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	color: #F0FFF5;
+	background: #317256;
+	cursor: pointer;
+	text-align: center;
+	text-shadow: 1px 1px 10px #317256;
+	border: none;
+	margin: 0.5em auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.card:hover,
+.tutorial-card:hover {
+	background: #F0FFF5;
+	color: #317256;
+	text-shadow: none;
+}
+.tutorial-card {
+	width: 45%;
+	min-height: 250px;
+	font-family: 'Fredoka One', cursive;
+	font-size: 3em;
+	padding: 1em;
+	border-radius: 1em;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	color: #F0FFF5;
+	background: #317256;
+	cursor: pointer;
+	text-align: center;
+	text-shadow: 1px 1px 10px #317256;
+	border: none;
+	margin: 0.5em auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/*============================
+		 Sign Up/Login
+============================*/
+
+.container {
+	width: 50vw;
+	min-height: 25vh;
+	margin: 5% auto;
+	padding: 1em;
+//	border: 5px solid #fee6bc;
+	border-radius: 1em;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+//	background-image: linear-gradient(to left top, #49ab81, #48a67e, #47a27a, #459d77, #449974);
+	background-image: linear-gradient(to right bottom, #398564, #3b8a68, #3d8e6b, #3f936f, #419873);
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
+	
+	display: flex;
+	flex-flow: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+//	color: #fefff7;
+
+	position: relative;
+}
+.container h2,
+.main-container h2 {
+	font-size: 2.5em;
+	font-family: 'Fredoka One', cursive;
+	text-shadow: 1px 1px 10px #317256;
+}
+.container-text {
+	font-size: 1.25em;
+}
+.container input,
+.container select {
+	margin: 0.5em auto;
+	padding: 0.25em 1em;
+	width: 90%;
+	height: 2em;
+	border-radius: 1em;
+	font-size: 1.5em;
+	outline: none;
+	box-shadow: inset 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+//	box-shadow: inset 0 1px 2px rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #000;
+}
+.container label {
+	font-size: 2em;
+}
+.container p {
+	font-size: 1.5em;
+	margin-top: 0.25em;
+}
+#gender {
+	margin-bottom: 1em;
+}
+.button-container {
+	width: 100%;
+	display: flex;
+}
+.button {
+	font-family: 'Fredoka One', cursive;
+	font-size: 1.5em;
+	padding: 0.25em 0.75em;
+	border-radius: 1em;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	color: #F0FFF5;
+	background: #317256;
+/*
+	color: #317256;
+	background: #F0FFF5;
+*/
+	cursor: pointer;
+	text-align: center;
+	max-width: 400px;
+//	text-shadow: 1px 1px 10px #52bf90;
+	text-shadow: 1px 1px 10px #317256;
+	border: none;
+	margin: 0.5em auto;
+}
+.button:hover {
+//	background: #317256;
+	background: #317256;
+	color: #F0FFF5;
+	background: #F0FFF5;
+	color: #317256;
+/* 	text-shadow: 1px 1px 10px #317256; */
+	text-shadow: none;
+}
+.button:active {
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+}
+.container a {
+	font-family: 'Fredoka One', cursive;
+	font-size: 1em;
+	text-shadow: 1px 1px 10px #317256;
+}
+.container a:hover {
+	border-bottom: 3px solid #317256;
+	border-bottom: 3px solid #F0FFF5;
+//	color: #fee6bc;
+}
+.container form {
+	width: 100%;
+	display: flex;
+	flex-flow: column;
+	justify-content: center;
+	align-content: center;
+}
+.icon-container {
+	width: 100%;
+	position: relative;
+}
+.help-icon,
+.error-icon {
+	cursor: pointer;
+	position: absolute;
+	right: 0;
+	top: 36.5%;
+	bottom: 0;
+	font-size: 1.25em;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 16.5px;
+	height: 16.5px;
+	border-radius: 50%;
+	font-size: 0.95em;
+	background: #FFF;
+	color: #398564;
+}
+.error-icon {
+	cursor: default;
+	color: red;
+}
+.tooltip-text {
+//	visibility: hidden;
+    width: 25vw;
+    height: 330px;
+    max-width: 250px;
+    background-color: #398564;
+    color: #fff;
+    text-align: center;
+    border-radius: 1em;
+    font-size: 0.65em;
+    padding: 1.75em;
+    box-shadow: 0 6px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+    
+    position: absolute;
+	z-index: 1;
+    top: -144px;
+    left: 107%;
+}
+.tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 20px;
+    border-style: solid;
+    border-color: transparent #398564 transparent transparent;
+}
+.tooltip-text h3 {
+	font-size: 2em;
+}
+.tooltip-text p {
+	margin-bottom: 0.5em;
+	text-align: start;
+}
+.errors-container {
+//	min-height: 250px;
+	padding: 0.75em;
+	border-radius: 1em;
+	border: 3px solid red;
+}
+.errors-container h3 {
+	font-size: 1.5em;
+}
+.errors-container p {
+	font-size: 1em;
+}
+.error {
+/* 	outline: red !important; */
+/* box-shadow: inset 0 4px 8px 0 red, 0 6px 20px 0 red; */
+	border: 3px solid red;
+/*
+	&:before {
+		content: "!";
+		color: red;
+	}
+*/
+}
+
+/*============================
+	       Footer
+============================*/
+
+footer {
+	width: 100%;
+	height: 10vh;
+	
+	position: fixed;
+	bottom: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.tabs-container {
+	width: 48vw;
+	height: 100%;
+	
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+}
+.tabs {
+	width: 15vw;
+	height: 80%;
+	min-height: 50px;
+	margin: 0 1px 0 1px;
+	cursor: pointer;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	border-radius: 1em 1em 0 0;
+//	background-image: linear-gradient(to right bottom, #398564, #3b8a68, #3d8e6b, #3f936f, #419873);
+	background: #317256;
+	
+	font-size: 1.5em;
+	text-align: center;
+	font-family: 'Fredoka One', cursive;
+	color: #F0FFF5;
+	text-shadow: 1px 1px 10px #317256;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.tabs ion-icon {
+//	font-size: 1em;
+	text-align: center;
+	width: 100%;
+	height: 100%;
+	width: 90%;
+	height: 90%;
+}
+.home-tab {
+	
+}
+.selected-tab,
+.tabs:hover {
+	height: 100%;
+	min-height: 60px;
 }
 
 /*============================
 	    JavaScript
 ============================*/
 .js-hidden {
-	display: none;
+	display: none !important;
 }
