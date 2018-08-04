@@ -36,9 +36,6 @@ function foodItemInfo() {
     var bp = 'Branded+Food+Products';
     var apiKey = "1iNPqKJmqxowTKpXfBBAk5BjERMSngYAtDlJxPrb";
     var queryURL = "https://api.nal.usda.gov/ndb/search/?format=json&q=" + search + "&sort=" + sort.relevance + "&max=" + limit + "&offset=0&ds=" + sr + "&&api_key=" + apiKey;
-    var ndbnoArray = [];
-
-    console.log("foodSearch: " + foodSearch);
 
     $.ajax({
         url: queryURL,
@@ -53,8 +50,6 @@ function foodItemInfo() {
             foodNum = $("<div id=foodInfo>")
             foodData = response.list.item[i].name;
             food = foodData.replace(/ *\([^)]*\) */g, " ");
-            ndbno = response.list.item[i].ndbno;
-            ndbnoArray.push(n + ndbno);
             foodDiv.attr("data-number", response.list.item[i].ndbno);
             foodDiv.attr("data-name", food);
             foodDiv.append(foodNum);
@@ -62,7 +57,6 @@ function foodItemInfo() {
             newDiv.append(foodDiv);
             $("#foodReport").append(newDiv);
         }
-        console.log(ndbnoArray);
     });
     console.log("foodItem function has run");
 } //closes foodItemInfo function
@@ -81,8 +75,6 @@ function brandedFood() {
     var bp = 'Branded+Food+Products';
     var apiKey = "1iNPqKJmqxowTKpXfBBAk5BjERMSngYAtDlJxPrb";
     var queryURL = "https://api.nal.usda.gov/ndb/search/?format=json&q=" + search + "&sort=" + sort.relevance + "&max=" + limit + "&offset=0&ds=" + bp + "&&api_key=" + apiKey;
-    var ndbnoArray = [];
-    console.log("brandSearch: " + brandSearch);
 
     $.ajax({
         url: queryURL,
@@ -95,26 +87,16 @@ function brandedFood() {
             newDiv = $("<div class=foodList>");
             foodDiv = $("<div id=foodItem>");
             foodNum = $("<div id=foodInfo>")
-            foodData = response.list.item[i].name;
+            foodResponse = response.list.item[i].name;
+            var unprepared = /, UNPREPARED/g;
+            foodData = foodResponse.replace(unprepared, "");
             if (foodData.includes(' UPC: ')) {
-                var foodLength = foodData.length;
-                console.log("Length: " + foodLength);
                 var erase = foodData.indexOf(', UPC:');
-                console.log("Erase: " + erase);
-                var remove = foodLength - erase;
-                console.log("Remove: " + remove);
                 food = foodData.substring(0, erase);
             } else if (foodData.includes('GTIN:')) {
-                var foodLength = foodData.length;
-                console.log("Length: " + foodLength);
                 var erase = foodData.indexOf(', GTIN:');
-                console.log("Erase: " + erase);
-                var remove = foodLength - erase;
-                console.log("Remove: " + remove);
                 food = foodData.substring(0, erase);
             }
-            ndbno = response.list.item[i].ndbno;
-            ndbnoArray.push(n + ndbno);
             foodDiv.attr("data-number", response.list.item[i].ndbno);
             foodDiv.attr("data-name", food);
             foodDiv.append(foodNum);
@@ -122,7 +104,6 @@ function brandedFood() {
             newDiv.append(foodDiv);
             $("#foodReport").append(newDiv);
         }
-        console.log(ndbnoArray);
     });
     console.log("brandedFood function has run");
 } //closes brandedFood function
@@ -141,7 +122,6 @@ function nutritionReport() {
         console.log(queryURL);
         console.log(response);
         var nutrientArray = response.foods[0].food.nutrients
-        console.log(nutrientArray);
         $("#nutrientReport").empty();
         for (i = 0; i < nutrientArray.length; i++) {
             nutrientTypeDiv = $("<div class=nutrientType>");
@@ -151,31 +131,31 @@ function nutritionReport() {
             measure = nutrientArray[i].measures[0].value;
 
             if (id == 203 || id == 204 || id == 205 || id == 269) {
-                nutrientTypeDiv.append(name + " - " + measure + unit + " per 100 grams");
-
+                // nutrientTypeDiv.append(name + " - " + measure + unit + " per 100 grams");
                 if (name == "Sugars, total") {
                     nutrientTypeDiv.attr("data-sugar", measure + unit);
                     dailyNutrition.sugar = measure + unit;
+                    nutrientTypeDiv.append("Total Sugar" + " - " + measure + unit);
                 } else if (name == "Carbohydrate, by difference") {
                     nutrientTypeDiv.attr("data-carb", measure + unit);
                     dailyNutrition.carbs = measure + unit;
+                    nutrientTypeDiv.append("Carbohydrates" + " - " + measure + unit);
                 } else if (name == "Total lipid (fat)") {
                     nutrientTypeDiv.attr("data-fat", measure + unit);
                     dailyNutrition.totalFat = measure + unit;
+                    nutrientTypeDiv.append("Total Fat" + " - " + measure + unit);
                 } else if (name == 'Protein') {
                     nutrientTypeDiv.attr("data-protein", measure + unit);
                     dailyNutrition.protein = measure + unit;
+                    nutrientTypeDiv.append("Protein" + " - " + measure + unit);
                 }
-
                 $("#nutrientReport").append(nutrientTypeDiv);
-
                 console.log(id + " " + name);
             };
         }
     })
     $("#foodName").text(foodName);
     console.log("foodReport function has run");
-    console.log(ndbno);
     $("#add").show();
     $("#save").show();
 }; //closes nutritionReport function
