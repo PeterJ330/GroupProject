@@ -518,6 +518,9 @@ h1 {
 	padding: 0.75em;
 	border-radius: 1em;
 	border: 3px solid red;
+	position: absolute;
+	bottom: 10%;
+	width: 100%;
 }
 .errors-container h3 {
 	font-size: 1.5em;
@@ -545,6 +548,27 @@ h1 {
 	width: 100%;
 	height: 100%;
 	position: relative;
+	overflow: auto;
+}
+#nutrition-default h2 {
+	margin-bottom: 0;
+}
+.day-container {
+	width: 100%;
+	text-align: center;
+	font-size: 2em;
+}
+#leftArrow,
+#rightArrow {
+	cursor: pointer;
+}
+#leftArrow:hover,
+#rightArrow:hover {
+	color: #317256;
+}
+#dayDisplay {
+	width: 75px;
+	margin: 0 0.5em 0 0.5em;
 }
 #nutrition-default table {
 	overflow: auto;
@@ -609,6 +633,12 @@ h1 {
 	width: 100%;
 	height: 100%;
 }
+#search-food-menu {
+	position: relative;
+}
+#search-food-menu hr {
+	margin: 0.15em 0 0.15em 0;
+}
 .search-container {
 	width: 100%;
 	height: 20%;
@@ -620,6 +650,46 @@ h1 {
 		
 	justify-content: center;
 	align-items: center;
+}
+.quickadd-container {
+	width: 100%;
+	width: 85%;
+	height: 30%;
+	display: grid;
+	grid:
+		"name name search" 1fr
+		"cal prot search" 1fr
+		"fat carbs search" 1fr
+		/ 40% 40% 20%;
+	justify-content: center;
+	align-items: center;
+	
+	position: absolute;
+	right: 0;
+	margin: 0 auto;
+/* 	border-top: 1px solid #317256; */
+}
+#customFoodName {
+	grid-area: name;
+}
+#customFoodCal {
+	grid-area: cal;
+	margin-right: 0.5em;
+}
+#customFoodProt {
+	grid-area: prot;
+	margin-left: 0.5em;
+}
+#customFoodFat {
+	grid-area: fat;
+	margin-right: 0.5em;
+}
+#customFoodCarbs {
+	grid-area: carbs;
+	margin-left: 0.5em;
+}
+#addCustomFood {
+	grid-area: search;
 }
 .search-container label {
 	font-size: 1.5em;
@@ -726,6 +796,24 @@ h1 {
 	margin: 0 auto;
 	font-size: 1em;
 }
+
+/*============================
+	       Footer
+============================*/
+
+#workout-default {
+	display: flex;
+	flex-flow: column;
+	justify-content: center;
+	align-items: center;
+}
+#workout-default a {
+	font-size: 1.5em;
+}
+#workout-default a:hover {
+	text-decoration: underline;
+}
+
 /*============================
 	       Footer
 ============================*/

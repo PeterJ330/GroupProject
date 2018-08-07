@@ -1,10 +1,13 @@
 <!DOCTYPE HTML>
 <html lang="en-us">
 <head>
-	<title>App Title</title>
+	<title>My Journey</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="App Description">
+	
+	<link rel="shortcut icon" href="assets/images/footsteps%202.jpg" type="image/x-icon">
+	<link rel="icon" href="/assets/images/footsteps%202.jpg" type="image/x-icon">
 	
 	<!--	Reset CSS	-->
 	<link rel="stylesheet" href="assets/styles/reset.css">
@@ -194,6 +197,9 @@
 			
 			<div id="nutrition-default" class="js-hidden menu" data-menu="4">
 				<h2>Food Journal</h2>
+				<div class="day-container">
+					<span id="leftArrow">&lt;</span><span id="dayDisplay">Today</span><span id="rightArrow" class="js-hidden">&gt;</span>
+				</div>
 				<div class="table-container">
 					<table class="table">
 					
@@ -236,7 +242,7 @@
 					</tbody>
 				</table>
 				<div class="button-container">
-					<div class="button" id="food-menu"><span class="add-icon">+</span> <span></span></div>
+					<div class="button" id="food-menu" title="Add Food"><span class="add-icon">+</span> <span></span></div>
 				</div>
 				</div>
 			</div>
@@ -260,6 +266,17 @@
 								<input id="brandCheck" type="checkbox" class="form-control" checked>
 <!-- 							</div> -->
 							<button class="button" id="search-btn">Search</button>
+						</form>
+						<hr>
+						<h3>Quick Add Food</h3>
+						<form class="quickadd-container">
+<!-- 							<label for="addFoodInput" id="addFoodLabel">Food</label> -->
+							<input id="customFoodName" type="text" placeholder="Food Name...">
+							<input id="customFoodCal" type="number" placeholder="Calories...">
+							<input id="customFoodProt" type="number" placeholder="Protein (in grams)...">
+							<input id="customFoodFat" type="number" placeholder="Fat (in grams)...">
+							<input id="customFoodCarbs" type="number" placeholder="Carbs (in grams)...">
+							<button class="button" id="addCustomFood">Add Food</button>
 						</form>
 						
 						<!--
@@ -475,20 +492,26 @@
 <!-- 				</div> -->
 			</div>
 			
+			<div id="workout-default" class="js-hidden menu" data-menu="6">
+				<h2>Workouts</h2>
+				<h2>( Work-In-Progress )</h2>
+				<a href="myWeightTraining.html" target="_blank">Check it out!</a>
+			</div>
+			
 		</div><!--	End of Main-Container (holds all of the menus)	-->
 			
 	</main>
 
 	<footer role="contentinfo">
 		<nav class="tabs-container">
-			<div class="tabs" id="workouts" data-tab="0">
-				Workouts
+			<div class="tabs" id="workouts" data-tab="0"><ion-icon name="fitness" title="Workouts"></ion-icon>
+<!-- 				Workouts -->
 			</div>
-			<div class="tabs home-tab selected-tab" data-tab="1" id="home">
+			<div class="tabs home-tab selected-tab" data-tab="1" id="home" title="Home">
 				<ion-icon name="home"></ion-icon>
 			</div>
-			<div class="tabs" data-tab="2" id="nutrition">
-				Nutrition
+			<div class="tabs" data-tab="2" id="nutrition" title="Nutrition"><ion-icon name="nutrition"></ion-icon>
+<!-- 				Nutrition -->
 			</div>
 		</nav>
 	</footer>
@@ -504,6 +527,7 @@ $(document).ready(function() {
 	console.log('Today: ' + today);
 	var yesterday = moment(today, 'YYYY MM DD').subtract(1, 'days').format('YYYY MM DD');
 	yesterday = yesterday.replace(/\s/g, '_');
+	var day = moment().format('YYYY MM DD');
 	console.log('Yesterday: ' + yesterday);
 	var menu = 'home';
 	var uid = '';
@@ -953,6 +977,8 @@ $(document).ready(function() {
 			errorsDiv.append(error);
 			$('#errors-display').append(errorsDiv);
 			
+			errors = true;
+			
 		} else if(!/^[A-Za-z0-9 ]*$/.test($('#foodInput').val())/*  || !/^[A-Za-z0-9 ]*$/.test($('#brandInput').val()) */) {
 			
 			$('#errors-display').empty();
@@ -993,6 +1019,117 @@ $(document).ready(function() {
 		    changeFoodMenu('#food-display');
 		}    
 		    
+	});
+	
+	$('#addCustomFood').click(function(event) {
+		event.preventDefault();
+		var food = $('#customFoodName').val().trim().toLowerCase();
+		var cal = $('#customFoodCal').val();
+		var prot = $('#customFoodProt').val();
+		var fat = $('#customFoodFat').val();
+		var carbs = $('#customFoodCarbs').val();
+		var timestamp = moment().format('X');
+		var errors = true;
+
+		if(food == '') {
+			
+			$('#append-results').empty();
+			$('#errors-display').empty();
+			var errorsDiv = $('<h3>');
+			errorsDiv.text('Please fix the following error:');
+			errorsDiv.addClass('errors-container');
+			var error = $('<p>');
+			error.html('&middot; Food name cannot be blank');
+			error.addClass('errors');
+			
+			errorsDiv.append(error);
+			$('#errors-display').append(errorsDiv);
+			
+			errors = true;
+			
+		} else if(!/^[A-Za-z0-9 ]*$/.test(food)) {
+			
+			$('#errors-display').empty();
+			var errorsDiv = $('<h3>');
+			errorsDiv.text('Please fix the following error:');
+			errorsDiv.addClass('errors-container');
+			var error = $('<p>');
+			error.html('&middot; Food name must contain only letters, numbers and spaces');
+			error.addClass('errors');
+			
+			errorsDiv.append(error);
+			$('#errors-display').append(errorsDiv);
+			
+			errors = true;
+
+		} else {
+			errors = false;
+			food = food.replace(/\s/g, '_');
+		}
+		
+		if(!errors) {
+			db.ref('users/' + uid + '/nutritionInfo/recentFood/' + food).update({
+				'timestamp': timestamp,
+				'food': food,
+				'servingCalories': cal,
+				'servingProtein': prot,
+				'servingFat': fat,
+				'servingCarbs': carbs
+			}, function(error) {
+				if(error) {
+					console.log(error.code);
+				} else {
+					console.log('DB saved successfully');
+				}
+			});
+			
+			db.ref('users/' + uid + '/dailyLogs/' + today + '/nutrition/food').push({
+				'timestamp': timestamp,
+				'food': food,
+				'calories': cal,
+				'protein': prot,
+				'fat': fat,
+				'carbs': carbs
+			}, function(error) {
+				if(error) {
+					console.log(error.code);
+				} else {
+					console.log('Food added to dailyLogs');
+				}
+			});
+			
+			db.ref('users/' + uid + '/nutritionInfo/recentFood/' + food + '/foodCount').transaction(function(counter) {
+				return counter + 1;
+			});
+			
+			db.ref('users/' + uid + '/dailyLogs/' + today + '/nutrition/caloriesToday').transaction(function(counter) {
+				return counter + parseFloat(cal);
+			});
+			
+			db.ref('users/' + uid + '/dailyLogs/' + today + '/nutrition/proteinToday').transaction(function(counter) {
+				return counter + parseFloat(prot);
+			});
+			
+			db.ref('users/' + uid + '/dailyLogs/' + today + '/nutrition/fatToday').transaction(function(counter) {
+				return counter + parseFloat(fat);
+			});
+			
+			db.ref('users/' + uid + '/dailyLogs/' + today + '/nutrition/carbsToday').transaction(function(counter) {
+				return counter + parseFloat(carbs);
+			});
+			
+			$('#customFoodName').val('')
+			$('#customFoodCal').val('');
+			$('#customFoodProt').val('');
+			$('#customFoodFat').val('');
+			$('#customFoodCarbs').val('');
+			
+			changeFoodMenu('#search-food-menu');
+			showdDailyNutrition(uid, today);
+			changeMenu('#nutrition-default');
+			
+		}
+		
 	});
 	
 	$(document).on('click', '.confirm-food', function() {
@@ -1220,6 +1357,41 @@ $(document).ready(function() {
 		$('[data-food-tab="2"]').removeClass('selected-tab');
 		$('[data-food-tab="3"]').removeClass('selected-tab');
 		changeFoodMenu('#saved-food-menu');
+	});
+	
+	$('#leftArrow').click(function() {
+		
+		day = day.replace(/_/g, ' ')
+		day = moment(day, 'YYYY MM DD').subtract(1, 'days').format('YYYY MM DD');
+		day = day.replace(/\s/g, '_');
+		showdDailyNutrition(uid, day);
+		
+		if(day == today) {
+			$('#dayDisplay').text('Today');
+		} else if(day == yesterday) {
+			$('#dayDisplay').text('Yesterday');
+		} else {
+			$('#dayDisplay').text(day.replace(/_/g, ' - '));
+		}
+		
+		$('#rightArrow').removeClass('js-hidden');
+	});
+	
+	$('#rightArrow').click(function() {
+		
+		day = day.replace(/_/g, ' ')
+		day = moment(day, 'YYYY MM DD').add(1, 'days').format('YYYY MM DD');
+		day = day.replace(/\s/g, '_');
+		showdDailyNutrition(uid, day);
+		
+		if(day == today) {
+			$('#dayDisplay').text('Today');
+			$('#rightArrow').addClass('js-hidden');
+		} else if(day == yesterday) {
+			$('#dayDisplay').text('Yesterday');
+		} else {
+			$('#dayDisplay').text(day.replace(/_/g, ' - '));
+		}
 	});
 	
 });	// end of document.ready

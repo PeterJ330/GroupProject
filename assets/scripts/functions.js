@@ -972,11 +972,11 @@ function showSaved(uid) {
 				
 }
 
-function showdDailyNutrition(uid, today) {
+function showdDailyNutrition(uid, day) {
 	
 	$('#daily-nutrition').empty();
 
-	db.ref('users/' + uid + '/dailyLogs/' + today + '/nutrition/food').orderByChild('timestamp').on('child_added', function(snap) {
+	db.ref('users/' + uid + '/dailyLogs/' + day + '/nutrition/food').orderByChild('timestamp').on('child_added', function(snap) {
 		console.log(snap.val());
 		var newRow = $('<tr>').addClass('save-food'); //.text(snap.val().food);
 		var foodTH = $('<th>').attr({'scope': 'row'}).text(snap.val().food);
