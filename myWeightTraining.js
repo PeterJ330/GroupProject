@@ -1,5 +1,5 @@
 //ajax call of the youtube channel 
-var muscleGroup = ['shoulder', 'Bicep', 'Tricep', 'Forearms', 'Abs', 'Back', 'Chest', 'Cavs', 'Hamstrings', 'Quadriceps', 'Trapezius',]
+var muscleGroup = ['Shoulder', 'Bicep', 'Tricep', 'Forearms', 'Abs', 'Back muscles', 'Chest muscles', 'Leg muscles', 'Hamstrings', 'Quadriceps', 'Trapezius',]
 var player;
 function onYouTubeIframeAPIReady(idOfVideo) {
     player = new YT.Player('player', {
@@ -9,50 +9,57 @@ function onYouTubeIframeAPIReady(idOfVideo) {
 
     });
 }
+
+// findVideoByTitleContent :: ([video], String) -> video || null
+function findVideoByTitleContent(videos, userSelectedVideoTitle) {
+    if(videos != null) {
+        let foundVideos = videos.filter(video => video.snippet.title.toLowerCase().indexOf(userSelectedVideoTitle.toLowerCase()) > -1);
+        if(foundVideos !== []) {
+            return foundVideos[0];
+        } else {
+            return null;
+        }
+    } else {
+        return null;
+    }
+}
+
+
 function displayMovieInfo() {
 
-    var movie = $(this).attr("data-name");
+    var userSelectedVideoTitle = $(this).attr("data-name");
     var URL =
-        'https://www.googleapis.com/youtube/v3/search?key=AIzaSyCAWTgwekE8oAGTZP2mxpGnho9lCz-zUs0&channelId=UC97k3hlbE-1rVN8y56zyEEA&part=snippet,id&order=date&maxResults=20';
+        'https://www.googleapis.com/youtube/v3/search?key=AIzaSyCAWTgwekE8oAGTZP2mxpGnho9lCz-zUs0&part=snippet,id&order=date&maxResults=20&q=' + encodeURI(userSelectedVideoTitle);
 
     $.ajax({
         url: URL,
         method: "GET",
     }).then(function (response) {
-
-        console.log(response.items[0].snippet.thumbnails.default.url);
-
         console.log(response);
+        let video = findVideoByTitleContent(response.items, userSelectedVideoTitle);
+        if(video != null) {
+            // Creating a div to hold the movie
+            var movieDiv = $("<div class='movie-view'>");
 
-        // Creating a div to hold the movie
-        var movieDiv = $("<div class='movie-view'>");
+            // Retrieving the URL for the image
+            var imgURL = video.snippet.thumbnails.default.url;
 
-        // Retrieving the URL for the image
-        var imgURL = response.items[0].snippet.thumbnails.default.url;
+            var vidID = video.id.videoId
+            console.log(vidID);
 
-        for (var i = 0; i < response.items.length; i++) {
-            var videoTitle = response.items[i].snippet.title.toLowerCase();
-            var userInput = 'chest';
-            // console.log(videoTitle)
-            if (videoTitle.indexOf(userInput) > -1) {
-                console.log(videoTitle)
-            }
+            player.loadVideoById(vidID);
+            // Creating an element to hold the image
+            var image = $("<img>").attr("src", imgURL);
+    
+            // Appending the image
+            movieDiv.append(image);
+    
+            // Putting the entire movie above the previous movies
+            $("#movies-view").prepend(movieDiv);    
+        } else {
+            console.log("video selected: " + userSelectedVideoTitle + " was not found");
         }
-        var vidID = response.items[0].id.videoId
-        console.log(vidID);
-        player.loadVideoById(vidID);
-        // Creating an element to hold the image
-        var image = $("<img>").attr("src", imgURL);
-
-        // Appending the image
-        movieDiv.append(image);
-
-        // Putting the entire movie above the previous movies
-        $("#movies-view").prepend(movieDiv);
-
-
     });
-
 };
 
 var tag = document.createElement('script');
