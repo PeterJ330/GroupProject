@@ -2,6 +2,11 @@ html {
     margin: Auto;
 }
 
+body{
+    background-color:rgb(18, 134, 76);
+    font-family: roboto;
+}
+
 #myWeightTraining {
     float: left;
     margin: auto;
@@ -9,10 +14,27 @@ html {
 
 }
 
-.custom-select {
-    margin: auto;
-    width: 200px;
-    height: 30px;
-    padding: 5px;
+#buttons-view{
+    margin: 0 auto;
+    display: block;
+    color: black;
+    font-family: roboto;
+    
+}
+
+#video{
+    
+    padding: 10px;
+    image-orientation: top;
+
+}
+
+.thumb{
+    height: 80px;
+
+}
+.jumbotron {
+    background: none;
+    color:whitesmoke;
     
 }
