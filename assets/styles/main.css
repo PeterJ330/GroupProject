@@ -144,7 +144,8 @@ h1 {
 }
 #home-default,
 #calculator,
-#results {
+#results,
+#food {
 	width: 100%;
 	display: flex;
 	flex-flow: column;
@@ -166,6 +167,7 @@ h1 {
 	align-items: center;
 	text-align: center;
 	flex-wrap: wrap;
+//	flex-flow: column;
 }
 .card-container h3 {
 	font-size: 1.8em;
@@ -193,8 +195,8 @@ h1 {
 	align-items: center;
 	flex-flow: column;
 	
-	width: 75%;
-	min-height: 300px;
+	width: 65%;
+	min-height: 250px;
 }
 .nutrient-container {
 	width: 100%;
@@ -408,6 +410,7 @@ h1 {
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 	color: #F0FFF5;
 	background: #317256;
+	outline: none;
 /*
 	color: #317256;
 	background: #F0FFF5;
@@ -535,6 +538,195 @@ h1 {
 }
 
 /*============================
+	    Nutrition-Menu
+============================*/
+
+#nutrition-default {
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+#nutrition-default table {
+	overflow: auto;
+}
+.table,
+.table th,
+.table tr,
+.table td {
+	text-align: center;
+	font-size: 1em;
+}
+.table .thead-dark th {
+	background-color: #317256;
+	border-color: #317256;
+	color: #F0FFF5;
+}
+#nutrition-default .button-container {
+	justify-content: flex-end;
+}
+#nutrition-default .button {
+	position: absolute;
+	bottom: 0;
+	margin: 0 auto;
+//	min-width: 250px;
+	width: 75px;
+	height: 75px;
+	display: flex;
+	flex-flow: row;
+	justify-content: center;
+	align-items: center;
+	
+	width: 85px;
+	height: 85px;
+	border-radius: 50%;
+}
+#nutrition-default .button .add-icon {
+	font-size: 1.5em;
+	font-size: 2.5em;
+	padding-bottom: 10px;
+//	margin-right: 20px;
+}
+#food {
+	position: static;
+	height: 100%;
+	width: 100%;
+}
+#food h2 {
+	margin-bottom: 0.1em;
+}
+#food-tabs {
+	width: 100%;
+	height: 15%;
+	position: absolute;
+	bottom: 0;
+}
+#food .content-container {
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+.food-menu {
+	width: 100%;
+	height: 100%;
+}
+.search-container {
+	width: 100%;
+	height: 20%;
+	display: grid;
+	grid:
+		"foodlabel food food search" 50%
+		"brandlabel brandlabel check search" 50%
+		/ 20% 40% 20% 20%;
+		
+	justify-content: center;
+	align-items: center;
+}
+.search-container label {
+	font-size: 1.5em;
+}
+#foodLabel {
+	grid-area: foodlabel;
+	margin-bottom: 0.5em;
+}
+#brandLabel {
+	grid-area: brandlabel;
+	margin-bottom: 0.5em;
+	text-align: end;
+	padding-right: 20px;
+}
+#foodInput {
+	grid-area: food;
+	margin-bottom: 0.5em;
+}
+.checkbox-container {
+	grid-area: checkbox;
+	margin-bottom: 0.5em;
+}
+#brandInput {
+//	grid-area: brand;
+//	margin-bottom: 0.5em;
+}
+#brandCheck {
+	grid-area: check;
+	margin-bottom: 0.5em;
+}
+#search-btn {
+	grid-area: search;
+	margin-bottom: 0.5em;
+}
+.search-results {
+	width: 100%;
+//	height: 100%;
+	margin: 0 auto;
+	margin-top: 1em;
+	font-size: 1.15em;
+}
+.search-results thead {
+	background: #317256;
+}
+/*
+.search-results .food-result {
+	font-size: 1.25em;
+	text-align: start;
+}
+*/
+.wide-col {
+	width: 60%;
+	overflow: hidden;
+}
+.narrow-col {
+	width: 10%;
+}
+.search-results tbody tr {
+	height: 1em;
+	margin-bottom: 0.25em;
+	overflow: hidden;
+	
+	cursor: pointer;
+}
+.search-results tbody tr:hover {
+	color: #317256;
+	background: #F0FFF5;
+}
+#food #quantity-container {
+	width: 70%;
+	margin: 0 auto;
+}
+#quantity-container form {
+	width: 100%;
+	height: 100%;
+//	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	flex-wrap: wrap;
+}
+#quantity-container label {
+	width: 35%;
+	font-size: 1.5em;
+	margin: 0 auto;
+}
+#quantity-container select {
+	width: 60%;
+	font-size: 1.5em;
+	margin: 0 auto;
+}
+#quantity-container div {
+	font-size: 1.5em;
+//	margin-bottom: 1em;
+}
+#quantity-selected {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+#quantity-selected label,
+#quantity-selected select {
+	width: 30%;
+	margin: 0 auto;
+	font-size: 1em;
+}
+/*============================
 	       Footer
 ============================*/
 
@@ -556,7 +748,8 @@ footer {
 	justify-content: center;
 	align-items: flex-end;
 }
-.tabs {
+.tabs,
+.food-tabs {
 	width: 15vw;
 	height: 80%;
 	min-height: 50px;
@@ -577,6 +770,9 @@ footer {
 	align-items: center;
 	justify-content: center;
 }
+.food-tabs {
+	height: 70%;
+}
 .tabs ion-icon {
 //	font-size: 1em;
 	text-align: center;
@@ -589,7 +785,9 @@ footer {
 	
 }
 .selected-tab,
-.tabs:hover {
+.tabs:hover,
+.selected-food-tab,
+.food-tabs:hover {
 	height: 100%;
 	min-height: 60px;
 }
