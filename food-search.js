@@ -114,7 +114,7 @@ function nutritionReport() {
     var ndbno = n + $(this).attr("data-number");
     var foodName = $(this).attr("data-name");
     var apiKey = "1iNPqKJmqxowTKpXfBBAk5BjERMSngYAtDlJxPrb";
-    var queryURL = "https://api.nal.usda.gov/ndb/V2/reports?" + ndbno + "&type=b&format=json&api_key=" + apiKey;
+    var queryURL = "https://api.nal.usda.gov/ndb/V2/reports?ndbno=" + ndbno + "&type=b&format=json&api_key=" + apiKey;
     $.ajax({
         url: queryURL,
         method: "GET"
@@ -165,6 +165,7 @@ function nutritionReport() {
 $("#food").on('click', function (event) {
     event.preventDefault();
     var foodItem = $("#foodInput").val().trim().toLowerCase();
+    console.log('Cody - foodItem: ' + foodItem);
     if (foodItem.includes('and')) {
         var and = /and /g;
         var newString = foodItem.replace(and, "");
@@ -188,6 +189,7 @@ $("#food").on('click', function (event) {
 $("#brand").on('click', function (event) {
     event.preventDefault();
     var searchItem = $("#brandInput").val().trim().toLowerCase();
+    console.log('Cody - searchItem: ' + searchItem);
     if (searchItem.includes('and')) {
         var and = /and /g;
         var newString = searchItem.replace(and, "");
